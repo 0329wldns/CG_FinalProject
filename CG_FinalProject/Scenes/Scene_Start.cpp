@@ -8,7 +8,8 @@ void Scene_Start::processKeyInput()
 {
 	if (KeyManager::getInstance().getKeyState(KEY::SPACE) == KEY_STATE::TAP)
 	{
-		Ball* ball{ new Ball(140.0f) };
+		Vector3  destination{ realDist(gen) * 500.0f, 0.0f, -realDist(gen) * 5000.0f };
+		Ball* ball{ new Ball(140.0f, destination) };
 		createObject(ball, OBJECT_GROUP::BALL);
 	}
 

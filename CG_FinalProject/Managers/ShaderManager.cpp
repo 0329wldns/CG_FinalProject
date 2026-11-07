@@ -15,15 +15,15 @@ void ShaderManager::init()
 
 	// 뷰변환 - 게임 오브젝트용
 	glm::mat4 view{
-		glm::lookAt(glm::vec3(300.0f, 300.0f, 600.0f)
-		, glm::vec3(0.0f, 0.0f, 0.0f)
+		glm::lookAt(glm::vec3(100.0f, 300.0f, 300.0f)
+		, glm::vec3(0.0f, 100.0f, -300.0f)
 		, glm::vec3(0.0f, 1.0f, 0.0f))
 	};
 	ShaderManager::getInstance().useProgram("default");
 	ShaderManager::getInstance().setMat4("default", "view", view);
 
 	// 원근 투영 - 게임 오브젝트용
-	glm::mat4 perspective{ glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, visibleRange) };
+	glm::mat4 perspective{ glm::perspective(glm::radians(60.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, visibleRange) };
 	ShaderManager::getInstance().useProgram("default");
 	ShaderManager::getInstance().setMat4("default", "projection", perspective);
 

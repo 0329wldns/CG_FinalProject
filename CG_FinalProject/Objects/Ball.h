@@ -7,7 +7,7 @@
 class Ball : public Object
 {
 public:
-	Ball(float _speed);
+	Ball(float _speed, Vector3 _destination);
 	~Ball();
 
 	// 매 프레임 공의 이동 및 물리/궤적 연산 처리
@@ -17,8 +17,18 @@ public:
 	void render() const override;
 
 private:
-	// 공의 진행방향 단위 벡터
-	Vector3 direction{ 0.0f, 0.0f, 1.0f };
+	// 공의 타격 지점
+	Vector3 hitPos;
+	
+	// 공의 착지 지점
+	Vector3 destination;
+
+	// 궤적 연산을 위한 매개변수 t
+	float t{ 0.0f };
+
+	// 공 궤적 정점 버퍼
+	uint32_t trajectoryVAO{};
+	uint32_t trajectoryVBO{};
 
 	// 공의 이동 속력
 	// km/h 단위
