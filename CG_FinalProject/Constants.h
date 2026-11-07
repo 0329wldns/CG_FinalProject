@@ -2,7 +2,7 @@
 #include "pch.h"
 
 // 프로그램 및 윈도우 타이틀 이름
-static const string PROGRAM_NAME{ "BaseBall Simulation" };
+static const char PROGRAM_NAME[] { "BaseBall Simulation" };
 
 // 난수 생성기 유틸리티
 static random_device rd{};

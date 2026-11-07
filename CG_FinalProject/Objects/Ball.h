@@ -7,8 +7,8 @@
 class Ball : public Object
 {
 public:
-	Ball() = default;
-	~Ball() = default;
+	Ball(float _speed);
+	~Ball();
 
 	// 매 프레임 공의 이동 및 물리/궤적 연산 처리
 	void update() override;
@@ -20,6 +20,7 @@ private:
 	// 공의 진행방향 단위 벡터
 	Vector3 direction{ 0.0f, 0.0f, 1.0f };
 
-	// 공의 이동 속력 (m/s 또는 프레임당 이동 거리)
+	// 공의 이동 속력
+	// km/h 단위
 	float speed{ 0.0f };
 };

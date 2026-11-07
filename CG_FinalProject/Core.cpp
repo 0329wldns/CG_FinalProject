@@ -33,7 +33,7 @@ int Core::init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// 윈도우 생성
-	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Game Engine", nullptr, nullptr);
+	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, PROGRAM_NAME, nullptr, nullptr);
 	if (!window)
 	{
 		cerr << "윈도우 생성 실패!\n";

@@ -19,6 +19,7 @@ enum class KEY
 
 	MINUS, EQUAL,
 
+	SPACE,
 	ENTER,
 	LEFT_SHIFT,
 
