@@ -15,6 +15,11 @@ void Scene_Start::update()
 	Scene::update();
 }
 
+void Scene_Start::drawBG() const
+{
+	Scene::drawAxis();
+}
+
 void Scene_Start::enter()
 {
 	

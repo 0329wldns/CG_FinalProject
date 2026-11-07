@@ -15,7 +15,7 @@ void ShaderManager::init()
 
 	// 뷰변환 - 게임 오브젝트용
 	glm::mat4 view{
-		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f)
+		glm::lookAt(glm::vec3(300.0f, 300.0f, 600.0f)
 		, glm::vec3(0.0f, 0.0f, 0.0f)
 		, glm::vec3(0.0f, 1.0f, 0.0f))
 	};
@@ -27,8 +27,8 @@ void ShaderManager::init()
 	ShaderManager::getInstance().useProgram("default");
 	ShaderManager::getInstance().setMat4("default", "projection", perspective);
 
-	// 직각 투영 - UI용
-	glm::mat4 ortho{ glm::ortho(0.0f, (float)SCREEN_WIDTH, 0.0f, (float)SCREEN_HEIGHT, 0.0f, 100.0f) };
+	// 직교 투영 - UI용
+	glm::mat4 ortho{ glm::ortho(0.0f, (float)SCREEN_WIDTH, 0.0f, (float)SCREEN_HEIGHT, -100.0f, 100.0f) };
 	ShaderManager::getInstance().useProgram("UI");
 	ShaderManager::getInstance().setMat4("UI", "projection", ortho);
 }

@@ -15,7 +15,7 @@ public:
 	virtual void render();
 
 	virtual void drawBG() const = 0;
-	virtual void drawUI() const = 0;
+	virtual void drawUI() const;
 	virtual void drawClear() const {};
 
 	void drawAxis() const;

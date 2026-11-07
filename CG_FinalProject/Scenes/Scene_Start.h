@@ -11,8 +11,7 @@ public:
 	void processKeyInput() override;
 	void update() override;
 
-	void drawBG() const override {};
-	void drawUI() const override {};
+	void drawBG() const override;
 
 	void enter() override;
 	void exit() override;

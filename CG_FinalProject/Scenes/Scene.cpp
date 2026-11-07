@@ -41,7 +41,10 @@ void Scene::finalUpdate()
 
 void Scene::render()
 {
+	glEnable(GL_DEPTH_TEST);
 	drawBG();
+
+	glDisable(GL_BLEND);
 	for (int i = 0; i < (int)OBJECT_GROUP::END; ++i)
 	{
 		for (size_t j = 0; j < object[i].size(); ++j)
@@ -52,9 +55,38 @@ void Scene::render()
 			}
 		}
 	}
+
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	drawUI();
 
 	drawClear();
+}
+
+void Scene::drawUI() const
+{
+	ShaderManager::getInstance().useProgram("UI");
+
+	for (int i = 0; i < (int)UI_GROUP::END; ++i)
+	{
+		for (size_t j = 0; j < ui[i].size(); ++j)
+		{
+			if (!ui[i][j]->isDead())
+			{
+				ui[i][j]->render();
+			}
+		}
+	}
+
+	Matrix4 test{ 1.0f };
+	test = glm::translate(test, Vector3(100.0f, 100.0f, 0.0f));
+	test = glm::scale(test, Vector3(100.0f, 100.0f, 1.0f));
+
+	ShaderManager::getInstance().setMat4("UI", "model", test);
+	ShaderManager::getInstance().setVec3("UI", "color", COLOR_BLACK);
+
+	MeshManager::getInstance().drawQuad();
 }
 
 void Scene::drawAxis() const
