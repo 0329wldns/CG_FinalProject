@@ -108,6 +108,8 @@ void CollisionManager::collisionGroupUpdate(OBJECT_GROUP left, OBJECT_GROUP righ
 
 bool CollisionManager::isCollision(const Collider* leftCol, const Collider* rightCol) const
 {
+	// 현재는 2D AABB 충돌만 지원
+
 	if ((leftCol->getPos().x - leftCol->getScale().x < rightCol->getPos().x + rightCol->getScale().x
 		&& leftCol->getPos().x + leftCol->getScale().x > rightCol->getPos().x - rightCol->getScale().x
 		&& leftCol->getPos().y - leftCol->getScale().y < rightCol->getPos().y + rightCol->getScale().y

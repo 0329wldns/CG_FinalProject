@@ -41,10 +41,23 @@ void Scene::finalUpdate()
 
 void Scene::render()
 {
+	// 배경 및 오브젝트 렌더링
+	// 원근 투영, 깊이 테스트 활성화
+	ShaderManager::getInstance().useProgram("default");
 	glEnable(GL_DEPTH_TEST);
+	
 	drawBG();
+	drawObject();
 
-	glDisable(GL_BLEND);
+	// UI 렌더링
+	// 직교 투영, 깊이 테스트 비활성화
+	ShaderManager::getInstance().useProgram("UI");
+	glDisable(GL_DEPTH_TEST);
+	drawUI();
+}
+
+void Scene::drawObject() const
+{
 	for (int i = 0; i < (int)OBJECT_GROUP::END; ++i)
 	{
 		for (size_t j = 0; j < object[i].size(); ++j)
@@ -55,19 +68,10 @@ void Scene::render()
 			}
 		}
 	}
-
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	drawUI();
-
-	drawClear();
 }
 
 void Scene::drawUI() const
 {
-	ShaderManager::getInstance().useProgram("UI");
-
 	for (int i = 0; i < (int)UI_GROUP::END; ++i)
 	{
 		for (size_t j = 0; j < ui[i].size(); ++j)
@@ -78,24 +82,14 @@ void Scene::drawUI() const
 			}
 		}
 	}
-
-	Matrix4 test{ 1.0f };
-	test = glm::translate(test, Vector3(100.0f, 100.0f, 0.0f));
-	test = glm::scale(test, Vector3(100.0f, 100.0f, 1.0f));
-
-	ShaderManager::getInstance().setMat4("UI", "model", test);
-	ShaderManager::getInstance().setVec3("UI", "color", COLOR_BLACK);
-
-	MeshManager::getInstance().drawQuad();
 }
 
 void Scene::drawAxis() const
 {
-	ShaderManager::getInstance().useProgram("default");
-
 	// X축
 	glm::mat4 model{ 1.0f };
-	model = glm::scale(model, Vector3((float)SCREEN_HEIGHT, 1.0f, 1.0f));
+	model = glm::scale(model, Vector3(visibleRange, 1.0f, 1.0f));
+
 	ShaderManager::getInstance().setMat4("default", "model", model);
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_RED);
 	ShaderManager::getInstance().setFloat("default", "transparency", 1.0f);
@@ -105,7 +99,7 @@ void Scene::drawAxis() const
 	// Y축
 	model = glm::mat4(1.0f);
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::scale(model, Vector3((float)SCREEN_HEIGHT, 1.0f, 1.0f));
+	model = glm::scale(model, Vector3(visibleRange, 1.0f, 1.0f));
 	ShaderManager::getInstance().setMat4("default", "model", model);
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_GREEN);
 
@@ -114,11 +108,40 @@ void Scene::drawAxis() const
 	// Z축
 	model = glm::mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::scale(model, Vector3((float)SCREEN_HEIGHT, 1.0f, 1.0f));
+	model = glm::scale(model, Vector3(visibleRange, 1.0f, 1.0f));
 	ShaderManager::getInstance().setMat4("default", "model", model);
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_BLUE);
 
 	MeshManager::getInstance().drawLine();
+}
+
+void Scene::drawGrid() const
+{
+	ShaderManager::getInstance().setVec3("default", "color", COLOR_GRAY);
+	ShaderManager::getInstance().setFloat("default", "transparency", 0.5f);
+
+	const float gridSpacing{ 100.0f };
+
+	// 가로선
+	for (float i = -visibleRange / 2.0f; i <= visibleRange / 2.0f; i += gridSpacing)
+	{
+		glm::mat4 model{ 1.0f };
+		model = glm::translate(model, Vector3(0.0f, 0.0f, i));
+		model = glm::scale(model, Vector3(visibleRange * 2, 1.0f, 1.0f));
+		ShaderManager::getInstance().setMat4("default", "model", model);
+		MeshManager::getInstance().drawLine();
+	}
+
+	// 세로선
+	for (float i = -visibleRange / 2.0f; i <= visibleRange / 2.0f; i += gridSpacing)
+	{
+		glm::mat4 model{ 1.0f };
+		model = glm::translate(model, Vector3(i, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, Vector3(visibleRange * 2, 1.0f, 1.0f));
+		ShaderManager::getInstance().setMat4("default", "model", model);
+		MeshManager::getInstance().drawLine();
+	}
 }
 
 void Scene::reset()

@@ -64,6 +64,10 @@ int Core::init()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glLineWidth(3);
 
+	// 알파 블렌딩 활성화
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	return 0;
 }
 
@@ -78,6 +82,7 @@ void Core::progress()
 	
 	finalUpdate();
 	CollisionManager::getInstance().update();
+
 	render();
 
 	EventManager::getInstance().update();
