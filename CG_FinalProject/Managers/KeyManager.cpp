@@ -1,0 +1,92 @@
+#include "pch.h"
+#include "KeyManager.h"
+#include "Constants.h"
+
+#include "Core.h"
+
+// GLFW 키 매핑 배열
+int arrVK[(int)KEY::LAST]
+{
+	GLFW_KEY_1,
+	GLFW_KEY_2,
+	GLFW_KEY_3,
+	GLFW_KEY_4,
+	GLFW_KEY_5,
+	GLFW_KEY_6,
+	GLFW_KEY_7,
+	GLFW_KEY_8,
+	GLFW_KEY_9,
+	GLFW_KEY_0,
+
+	GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D,
+	GLFW_KEY_I, GLFW_KEY_J, GLFW_KEY_K, GLFW_KEY_L,
+
+	GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_LEFT, GLFW_KEY_RIGHT,
+
+	GLFW_KEY_Q, GLFW_KEY_E, GLFW_KEY_R, GLFW_KEY_T, GLFW_KEY_Y, GLFW_KEY_U, GLFW_KEY_O, GLFW_KEY_P,
+	GLFW_KEY_F, GLFW_KEY_G, GLFW_KEY_H,
+	GLFW_KEY_Z, GLFW_KEY_X, GLFW_KEY_C, GLFW_KEY_V, GLFW_KEY_B, GLFW_KEY_N, GLFW_KEY_M,
+
+	GLFW_KEY_MINUS, GLFW_KEY_EQUAL,
+
+	GLFW_KEY_ENTER,
+	GLFW_KEY_LEFT_SHIFT,
+
+	GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT, // 마우스
+	GLFW_KEY_ESCAPE
+};
+
+void KeyManager::init()
+{
+	for (int i{}; i < (int)KEY::LAST; ++i)
+	{
+		keyInfo.push_back(KeyInfo{ KEY_STATE::NONE, false });
+	}
+}
+
+void KeyManager::update()
+{
+	GLFWwindow* window{ Core::getInstance().getWindow() };
+	if (!window) return;
+
+	double mouseX{};
+	double mouseY{};
+
+	glfwGetCursorPos(window, &mouseX, &mouseY);
+	mouseY = SCREEN_HEIGHT - mouseY;
+
+	curMousePos.x = (float)mouseX - (float)SCREEN_WIDTH / 2.0f;
+	curMousePos.y = (float)mouseY - (float)SCREEN_HEIGHT / 2.0f;
+
+	for (int i{}; i < (int)KEY::LAST; ++i)
+	{
+		bool isPressed{};
+
+		// 마우스와 키보드는 GLFW 검사 함수가 서로 다름
+		if (arrVK[i] == GLFW_MOUSE_BUTTON_LEFT || arrVK[i] == GLFW_MOUSE_BUTTON_RIGHT)
+		{
+			if (mouseX > 0 && mouseX < SCREEN_WIDTH
+				&& mouseY > 0 && mouseY < SCREEN_HEIGHT)
+				isPressed = (glfwGetMouseButton(window, arrVK[i]) == GLFW_PRESS);
+		}
+		else
+		{
+			isPressed = (glfwGetKey(window, arrVK[i]) == GLFW_PRESS);
+		}
+
+		if (isPressed)
+		{
+			if (keyInfo[i].prevPush) keyInfo[i].keyState = KEY_STATE::HOLD;
+			else keyInfo[i].keyState = KEY_STATE::TAP;
+
+			keyInfo[i].prevPush = true;
+		}
+		else
+		{
+			if (keyInfo[i].prevPush) keyInfo[i].keyState = KEY_STATE::AWAY;
+			else keyInfo[i].keyState = KEY_STATE::NONE;
+
+			keyInfo[i].prevPush = false;
+		}
+	}
+}
