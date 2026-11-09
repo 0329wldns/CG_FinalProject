@@ -12,8 +12,13 @@ public:
 	void update() override;
 	void render() const override;
 
-	void setAt(Vector3 _at) { at = _at; }
+	void init();
+
+	void setAt(Vector3 _at);
+	void setAtImediate(Vector3 _at) { at = _at; oldAt = _at; t = 0.0f; }
 
 private:
+	Vector3 oldAt;
 	Vector3 at;
+	float t;
 };

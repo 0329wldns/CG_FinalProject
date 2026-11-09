@@ -96,6 +96,4 @@ void Ball::render() const
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_RED);
 
 	MeshManager::getInstance().drawMesh("sphere");
-
-	
 }

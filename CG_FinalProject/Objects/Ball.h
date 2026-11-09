@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Object.h"
+#include "Camera.h"
 
 // 야구공 오브젝트 클래스
 // 투구 궤적(베지어 곡선) 및 타격 후 물리 이동을 담당
@@ -15,6 +16,9 @@ public:
 
 	// 공 3D 메쉬(sphere) 렌더링
 	void render() const override;
+
+	float getT() const { return t; }
+	Vector3  getDestination() const { return destination; }
 
 private:
 	// 공의 타격 지점
