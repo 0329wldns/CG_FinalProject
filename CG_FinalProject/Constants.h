@@ -40,6 +40,7 @@ enum class SCENE_TYPE
 enum class OBJECT_GROUP
 {
 	DEFAULT,	// 일반 배경 및 기타 오브젝트
+	CAMERA,		// 카메라 관련 오브젝트
 	BALL,		// 야구공
 	BAT,		// 야구 배트
 

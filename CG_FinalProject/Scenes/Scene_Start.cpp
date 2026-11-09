@@ -11,6 +11,11 @@ void Scene_Start::processKeyInput()
 		Vector3  destination{ realDist(gen) * 500.0f, 0.0f, -realDist(gen) * 5000.0f };
 		Ball* ball{ new Ball(140.0f, destination) };
 		createObject(ball, OBJECT_GROUP::BALL);
+		
+		Vector3 midPos{ (Vector3(0.0f, 0.0f, 0.0f) + destination) * 0.5f};	// 중간 위치, 2번째 컨트롤 포인트
+		midPos.y += 1000.0f;	// 일단 대충 중간 점에서 500 위로 올림
+
+		camera->setAt(midPos);
 	}
 
 	if (KeyManager::getInstance().getKeyState(KEY::ESC) == KEY_STATE::TAP)
@@ -32,10 +37,12 @@ void Scene_Start::drawBG() const
 
 void Scene_Start::enter()
 {
-	
+	camera = new Camera(Vector3(0.0f, 300.0f, 1000.0f));
 }
 
 void Scene_Start::exit()
 {
 	reset();
+	delete camera;
+	camera = nullptr;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Scene.h"
+#include "Camera.h"
 
 // 시작 씬 (타이틀 화면 / 모드 및 난이도 선택)
 class Scene_Start : public Scene
@@ -25,4 +26,5 @@ public:
 	void exit() override;
 
 private:
+	Camera* camera;
 };
