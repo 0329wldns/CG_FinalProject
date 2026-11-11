@@ -55,4 +55,8 @@ private:
 	// 공의 이동 속력
 	// km/h 단위
 	float speed{ 0.0f };
+
+	// 디버그용
+	// 공이 끝까지 가는 데 걸린시간
+	float accTime{ 0.0f };
 };

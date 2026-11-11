@@ -34,6 +34,8 @@ private:
 
 	// 디버그용 플래그들
 	bool showAxis{ false };
-	bool showGrid{ false };
+	bool showGridXZ{ false };
+	bool showGridYZ{ false };
+	bool showGridXY{ false };
 	bool showBG{ true };
 };

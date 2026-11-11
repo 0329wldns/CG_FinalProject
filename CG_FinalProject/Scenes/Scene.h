@@ -37,8 +37,8 @@ public:
 	// 좌표 축을 그리는 함수, 필요시 호출
 	void drawAxis() const;
 
-	// xz 평면에 그리드 그리는 함수, 필요시 호출
-	void drawGrid() const;
+	// 평면에 그리드 그리는 함수, 필요시 호출
+	void drawGrid(bool xz, bool yz, bool xy) const;
 
 
 	// 씬 진입 및 탈출 시 처리할 로직

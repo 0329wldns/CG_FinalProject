@@ -11,21 +11,21 @@ Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	, destination(_destination)
 	, pitchType(_pitchType)
 {
-	startPos = Vector3(0.0f, 150.0f, -1800.0f);
+	startPos = Vector3(-30.0f, 150.0f, -1800.0f);
 
 	setPos(startPos);
-	setScale(Vector3{ 7.0f, 7.0f, 7.0f });
+	setScale(Vector3{ 3.5f, 3.5f, 3.5f });
 
 	switch (pitchType)
 	{
 	case PITCH_TYPE::STRAIGHT:
 		// 직구 - 컨트롤 포인트가 직선위에 있음
-		midControlPoint = (startPos + destination) * 0.5f;
+		midControlPoint = startPos;
 		break;
 	case PITCH_TYPE::CURVE:
 		// 커브볼 - n% 지접을 2번째 컨트롤 포인트로 설정
 		midControlPoint = (startPos + destination) * 0.7f;
-		midControlPoint.y = startPos.y + 100.0f;
+		midControlPoint.y = startPos.y;
 		break;
 	}
 
@@ -99,15 +99,20 @@ void Ball::update()
 {
 	float dt{ TimeManager::getInstance().getDeltaTime() };
 
+	accTime += dt;
+
 	Vector3 myPos{ (1.0f - t) * (1.0f - t) * startPos
 			+ 2.0f * (1.0f - t) * t * midControlPoint
 			+ t * t * destination };
 
-	t += dt;
+	// 18m를 1초 만에 가려면 64.8km/h
+
+	t += dt * speed / 64.8f;
 	if (t > 1.0f)
 	{
 		deleteObject(this);
-		cout << "공 날아간 거리: " << glm::distance(Vector2(startPos.x, startPos.z), Vector2(destination.x, destination.z)) / 100.0f << "m" << endl;
+		cout << "날아간 거리: " << glm::distance(Vector2(startPos.x, startPos.z), Vector2(destination.x, destination.z)) / 100.0f << "m" << endl;
+		cout << "걸린시간: " << accTime << "초" << endl;
 	}
 
 	setPos( myPos );
