@@ -31,4 +31,9 @@ private:
 	Camera* camera;
 	Ball* ball;
 	Park park;
+
+	// 디버그용 플래그들
+	bool showAxis{ false };
+	bool showGrid{ false };
+	bool showBG{ true };
 };

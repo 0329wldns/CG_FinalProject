@@ -6,26 +6,26 @@
 #include "Constants.h"
 #include "EventFunc.h"
 
-Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE pitchType)
+Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	: speed(_speed)
 	, destination(_destination)
+	, pitchType(_pitchType)
 {
-	Vector3 throwPos{ 0.0f, 1300.0f, -1800.0f };
-	Vector3 midControlPoint;	// 중간 위치, 2번째 컨트롤 포인트
+	startPos = Vector3(0.0f, 150.0f, -1800.0f);
 
-	setPos(throwPos);
+	setPos(startPos);
 	setScale(Vector3{ 7.0f, 7.0f, 7.0f });
 
 	switch (pitchType)
 	{
 	case PITCH_TYPE::STRAIGHT:
 		// 직구 - 컨트롤 포인트가 직선위에 있음
-		midControlPoint = (throwPos + destination) * 0.5f;
+		midControlPoint = (startPos + destination) * 0.5f;
 		break;
 	case PITCH_TYPE::CURVE:
-		// 커브볼 - 70% 지접을 2번째 컨트롤 포인트로 설정
-		midControlPoint = (throwPos + destination) * 0.7f ;
-		midControlPoint.y = throwPos.y;
+		// 커브볼 - n% 지접을 2번째 컨트롤 포인트로 설정
+		midControlPoint = (startPos + destination) * 0.7f;
+		midControlPoint.y = startPos.y + 100.0f;
 		break;
 	}
 
@@ -34,7 +34,7 @@ Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE pitchType)
 
 	for (float t = 0.0f; t <= 1.0f; t += 0.01f)
 	{
-		Vector3 pos{ (1.0f - t) * (1.0f - t) * throwPos
+		Vector3 pos{ (1.0f - t) * (1.0f - t) * startPos
 			+ 2.0f * (1.0f - t) * t * midControlPoint
 			+ t * t * destination };
 
@@ -58,23 +58,19 @@ Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE pitchType)
 Ball::Ball(float _speed, Vector3 _destination)
 	: speed( _speed )
 	, destination( _destination )
-	, hitPos( Vector3{ 0.0f, 0.0f, 0.0f } )
+	, startPos( Vector3{ 0.0f, 0.0f, 0.0f } )
 {
-	setPos(hitPos);
+	setPos(startPos);
 	setScale(Vector3{ 7.0f, 7.0f, 7.0f });
 
 	// 공 궤적 정점 버퍼 세팅
 	std::vector<std::array<float, 3>> trajectoryVertices;
 	trajectoryVertices.reserve(100);
 
-	Vector3 startPos{ hitPos };	// 공이 타격된 위치, 1번째 컨트롤 포인트
-	Vector3 midPos{ (startPos + destination) * 0.5f };	// 중간 위치, 2번째 컨트롤 포인트
-	midPos.y += 1000.0f;	// 일단 대충 중간 점에서 500 위로 올림
-
 	for (float t = 0.0f; t <= 1.0f; t += 0.01f)
 	{
 		Vector3 pos{ (1.0f - t) * (1.0f - t) * startPos
-			+ 2.0f * (1.0f - t) * t * midPos
+			+ 2.0f * (1.0f - t) * t * midControlPoint
 			+ t * t * destination };
 
 		trajectoryVertices.push_back({ pos.x, pos.y, pos.z });
@@ -103,21 +99,15 @@ void Ball::update()
 {
 	float dt{ TimeManager::getInstance().getDeltaTime() };
 
-	Vector3 direction = glm::normalize(destination - getPos());
-
-	Vector3 startPos{ hitPos };	// 공이 타격된 위치, 1번째 컨트롤 포인트
-	Vector3 midPos{ (startPos + destination) * 0.5f };	// 중간 위치, 2번째 컨트롤 포인트
-	midPos.y += 1000.0f;
-
 	Vector3 myPos{ (1.0f - t) * (1.0f - t) * startPos
-			+ 2.0f * (1.0f - t) * t * midPos
+			+ 2.0f * (1.0f - t) * t * midControlPoint
 			+ t * t * destination };
 
 	t += dt;
 	if (t > 1.0f)
 	{
 		deleteObject(this);
-		cout << "공 날아간 거리: " << glm::distance(hitPos, destination) / 100.0f << "m" << endl;
+		cout << "공 날아간 거리: " << glm::distance(Vector2(startPos.x, startPos.z), Vector2(destination.x, destination.z)) / 100.0f << "m" << endl;
 	}
 
 	setPos( myPos );

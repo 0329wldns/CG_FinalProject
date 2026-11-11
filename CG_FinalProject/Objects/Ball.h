@@ -16,7 +16,7 @@ enum class PITCH_TYPE
 class Ball : public Object
 {
 public:
-	Ball(float _speed, Vector3 _destination, PITCH_TYPE pitchType);
+	Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType);
 	Ball(float _speed, Vector3 _destination);
 	~Ball();
 
@@ -30,12 +30,18 @@ public:
 	Vector3  getDestination() const { return destination; }
 
 private:
-	// 공의 이동 방향, 단위 벡터로 쓸거임
-	Vector3 direction;
+	// 공의 구종
+	PITCH_TYPE pitchType{};
 
-	// 공의 타격 지점
-	Vector3 hitPos;
+	// 공의 타격 후 날아갈 방향, 단위 벡터로 쓸거임
+	Vector3 direction{};
+
+	// 공이 던져진 위치 및 타격된 위치
+	Vector3 startPos;
 	
+	// 2번째 컨트롤 포인트
+	Vector3 midControlPoint{};
+
 	// 공의 착지 지점
 	Vector3 destination;
 
