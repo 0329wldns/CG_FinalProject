@@ -6,6 +6,55 @@
 #include "Constants.h"
 #include "EventFunc.h"
 
+Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE pitchType)
+	: speed(_speed)
+	, destination(_destination)
+{
+	Vector3 throwPos{ 0.0f, 1300.0f, -1800.0f };
+	Vector3 midControlPoint;	// 중간 위치, 2번째 컨트롤 포인트
+
+	setPos(throwPos);
+	setScale(Vector3{ 7.0f, 7.0f, 7.0f });
+
+	switch (pitchType)
+	{
+	case PITCH_TYPE::STRAIGHT:
+		// 직구 - 컨트롤 포인트가 직선위에 있음
+		midControlPoint = (throwPos + destination) * 0.5f;
+		break;
+	case PITCH_TYPE::CURVE:
+		// 커브볼 - 70% 지접을 2번째 컨트롤 포인트로 설정
+		midControlPoint = (throwPos + destination) * 0.7f ;
+		midControlPoint.y = throwPos.y;
+		break;
+	}
+
+	std::vector<std::array<float, 3>> trajectoryVertices;
+	trajectoryVertices.reserve(100);
+
+	for (float t = 0.0f; t <= 1.0f; t += 0.01f)
+	{
+		Vector3 pos{ (1.0f - t) * (1.0f - t) * throwPos
+			+ 2.0f * (1.0f - t) * t * midControlPoint
+			+ t * t * destination };
+
+		trajectoryVertices.push_back({ pos.x, pos.y, pos.z });
+	}
+
+	glGenVertexArrays(1, &trajectoryVAO);
+	glGenBuffers(1, &trajectoryVBO);
+
+	glBindVertexArray(trajectoryVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, trajectoryVBO);
+	glBufferData(GL_ARRAY_BUFFER, trajectoryVertices.size() * sizeof(std::array<float, 3>), trajectoryVertices.data(), GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
 Ball::Ball(float _speed, Vector3 _destination)
 	: speed( _speed )
 	, destination( _destination )

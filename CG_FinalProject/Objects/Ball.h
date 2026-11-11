@@ -3,11 +3,20 @@
 #include "Object.h"
 #include "Camera.h"
 
+enum class PITCH_TYPE
+{
+	STRAIGHT,
+	CURVE,
+	SLIDER,
+	FORK
+};
+
 // 야구공 오브젝트 클래스
 // 투구 궤적(베지어 곡선) 및 타격 후 물리 이동을 담당
 class Ball : public Object
 {
 public:
+	Ball(float _speed, Vector3 _destination, PITCH_TYPE pitchType);
 	Ball(float _speed, Vector3 _destination);
 	~Ball();
 
@@ -21,6 +30,9 @@ public:
 	Vector3  getDestination() const { return destination; }
 
 private:
+	// 공의 이동 방향, 단위 벡터로 쓸거임
+	Vector3 direction;
+
 	// 공의 타격 지점
 	Vector3 hitPos;
 	
