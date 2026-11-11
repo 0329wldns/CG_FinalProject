@@ -1,7 +1,6 @@
 #pragma once
 #include "pch.h"
 #include "Singleton.h"
-#include <unordered_map>
 
 // 셰이더 프로그램(GLSL)의 컴파일, 바인딩 및 Uniform 변수 전달을 총괄하는 매니저
 class ShaderManager : public Singleton<ShaderManager>

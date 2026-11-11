@@ -9,6 +9,7 @@
 #include <windows.h>
 #include <cmath>
 #include <array>
+#include <unordered_map>
 
 // OpenGL / GLEW / GLFW 그래픽스 라이브러리
 #include <GL/glew.h>
