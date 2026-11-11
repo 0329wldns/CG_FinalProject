@@ -184,6 +184,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Managers\TimeManager.h" />
+    <ClInclude Include="UI\Park.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\default.frag" />

@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Singleton.h"
+#include <unordered_map>
 
 // OpenGL 메쉬 렌더링에 필요한 버퍼 ID 및 정점 수 정보를 담는 구조체
 struct MeshData
