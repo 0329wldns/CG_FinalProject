@@ -27,8 +27,10 @@ void Scene_Start::update()
 
 void Scene_Start::drawBG() const
 {
-	Scene::drawAxis();
+	park.render();
+	//Scene::drawAxis();
 	Scene::drawGrid();
+
 }
 
 void Scene_Start::enter()

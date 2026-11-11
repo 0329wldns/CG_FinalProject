@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "Ball.h"
+#include "UI/Park.h"
 
 // 시작 씬 (타이틀 화면 / 모드 및 난이도 선택)
 class Scene_Start : public Scene
@@ -29,4 +30,5 @@ public:
 private:
 	Camera* camera;
 	Ball* ball;
+	Park park;
 };
