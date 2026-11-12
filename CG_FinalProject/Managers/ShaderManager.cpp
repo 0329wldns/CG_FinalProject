@@ -23,7 +23,7 @@ void ShaderManager::init()
 	ShaderManager::getInstance().setMat4("default", "view", view);
 
 	// 원근 투영 - 게임 오브젝트용
-	glm::mat4 perspective{ glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, visibleRange) };
+	glm::mat4 perspective{ glm::perspective(glm::radians(60.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, visibleRange) };
 	ShaderManager::getInstance().useProgram("default");
 	ShaderManager::getInstance().setMat4("default", "projection", perspective);
 

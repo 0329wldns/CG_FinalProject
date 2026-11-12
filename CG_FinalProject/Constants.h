@@ -43,11 +43,13 @@ enum class OBJECT_GROUP
 	CAMERA,		// 카메라 관련 오브젝트
 	BALL,		// 야구공
 	BAT,		// 야구 배트
+	STRIKE_ZONE,	// 스트라이크 존
 
 	END			// 그룹 개수 파악용
 };
 
 // 2D UI 렌더링 레이어 그룹 (END 앞에 추가)
+// UI는 깊이 테스트 빼고, 오브젝트 보다 나중에 랜더링 함 -> 맨 위에 그려짐
 enum class UI_GROUP
 {
 	DEFAULT,	// 일반 2D HUD 패널, 텍스트
@@ -55,3 +57,11 @@ enum class UI_GROUP
 
 	END			// 그룹 개수 파악용
 };
+
+namespace STRIKE_ZONE
+{
+	static const float WIDTH{ 43.0f };
+	static const float HEIGHT{ 51.7f };
+	static const float DEPTH{ 0.1f };
+	static const Vector3 CENTER{ 0.0f, 74.5f, 0.0f };
+}

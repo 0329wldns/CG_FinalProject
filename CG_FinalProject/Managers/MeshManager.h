@@ -38,7 +38,7 @@ public:
 	void drawQuad(bool drawLine = false) const;		// 단위 사각형 그리기 (UI 버튼 등에 활용)
 	void drawTriangle(bool drawLine = false) const;	// 단위 삼각형 그리기
 	void drawLine() const;							// 단위 선 그리기 (좌표축, 광선 디버깅 등에 활용)
-	void drawCircle() const;						// 원 그리기 (SBO 전광판 카운트 표시에 활용)
+	void drawCircle(bool drawLine = false) const;	// 원 그리기 (SBO 전광판 카운트 표시에 활용)
 	void drawDot() const;							// 점 그리기
 
 	// 메쉬 버퍼 정보 가져오기

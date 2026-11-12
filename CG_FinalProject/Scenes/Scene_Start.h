@@ -5,7 +5,7 @@
 #include "Ball.h"
 #include "UI/Park.h"
 
-// 시작 씬 (타이틀 화면 / 모드 및 난이도 선택)
+// 시작 씬 (타이틀 화면 / 모드 및 난이도 선택), *(현재는 인게임 테스트 용)*
 class Scene_Start : public Scene
 {
 public:
@@ -27,6 +27,8 @@ public:
 	// 씬 탈출 시 리소스 정리
 	void exit() override;
 
+	bool isShowTrajectory() const { return showTrajectory; }
+
 private:
 	Camera* camera;
 	Ball* ball;
@@ -38,4 +40,5 @@ private:
 	bool showGridYZ{ false };
 	bool showGridXY{ false };
 	bool showBG{ true };
+	bool showTrajectory{ true };
 };

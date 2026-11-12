@@ -318,13 +318,15 @@ void MeshManager::drawLine() const
 	glBindVertexArray(0);
 }
 
-void MeshManager::drawCircle() const
+void MeshManager::drawCircle(bool drawLine) const
 {
+	if (drawLine) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	glBindVertexArray(circleVAO);
-
 	glDrawArrays(GL_LINE_LOOP, 0, 1000);
-
 	glBindVertexArray(0);
+
+	if (drawLine) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void MeshManager::drawDot() const

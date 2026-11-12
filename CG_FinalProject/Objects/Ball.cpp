@@ -5,13 +5,15 @@
 #include "TimeManager.h"
 #include "Constants.h"
 #include "EventFunc.h"
+#include "Scene_Start.h"
+#include "SceneManager.h"
 
 Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	: speed(_speed)
 	, destination(_destination)
 	, pitchType(_pitchType)
 {
-	startPos = Vector3(-30.0f, 150.0f, -1800.0f);
+	startPos = Vector3(-30.0f, 170.0f, -1800.0f);
 
 	setPos(startPos);
 	setScale(Vector3{ 3.5f, 3.5f, 3.5f });
@@ -19,26 +21,35 @@ Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	switch (pitchType)
 	{
 	case PITCH_TYPE::STRAIGHT:
-		// 직구 - 컨트롤 포인트가 직선위에 있음
-		midControlPoint = startPos;
 		break;
 	case PITCH_TYPE::CURVE:
 		// 커브볼 - n% 지접을 2번째 컨트롤 포인트로 설정
-		midControlPoint = (startPos + destination) * 0.7f;
+		midControlPoint = (startPos + destination) * 0.3f;
 		midControlPoint.y = startPos.y;
 		break;
 	}
 
 	std::vector<std::array<float, 3>> trajectoryVertices;
-	trajectoryVertices.reserve(100);
-
-	for (float t = 0.0f; t <= 1.0f; t += 0.01f)
+	trajectoryVertices.reserve(50);
+	if (pitchType == PITCH_TYPE::STRAIGHT)
 	{
-		Vector3 pos{ (1.0f - t) * (1.0f - t) * startPos
-			+ 2.0f * (1.0f - t) * t * midControlPoint
-			+ t * t * destination };
+		for (float t = 0.0f; t <= 1.0f; t += 0.02f)
+		{
+			Vector3 pos{ (1.0f - t) * startPos + t * destination };
 
-		trajectoryVertices.push_back({ pos.x, pos.y, pos.z });
+			trajectoryVertices.push_back({ pos.x, pos.y, pos.z });
+		}
+	}
+	else
+	{
+		for (float t = 0.0f; t <= 1.0f; t += 0.02f)
+		{
+			Vector3 pos{ (1.0f - t) * (1.0f - t) * startPos
+				+ 2.0f * (1.0f - t) * t * midControlPoint
+				+ t * t * destination };
+
+			trajectoryVertices.push_back({ pos.x, pos.y, pos.z });
+		}
 	}
 
 	glGenVertexArrays(1, &trajectoryVAO);
@@ -101,13 +112,22 @@ void Ball::update()
 
 	accTime += dt;
 
-	Vector3 myPos{ (1.0f - t) * (1.0f - t) * startPos
+	Vector3 myPos{};
+
+	if (pitchType == PITCH_TYPE::STRAIGHT)
+	{
+		myPos = (1.0f - t) * startPos + t * destination;
+	}
+	else
+	{
+		myPos = (1.0f - t) * (1.0f - t) * startPos
 			+ 2.0f * (1.0f - t) * t * midControlPoint
-			+ t * t * destination };
+			+ t * t * destination;
+	}
 
 	// 18m를 1초 만에 가려면 64.8km/h
-
 	t += dt * speed / 64.8f;
+
 	if (t > 1.0f)
 	{
 		deleteObject(this);
@@ -120,14 +140,20 @@ void Ball::update()
 
 void Ball::render() const
 {
+	Scene_Start* curScene{ static_cast<Scene_Start*>(SceneManager::getInstance().getCurScene()) };
+
 	// 공 궤적 렌더링
-	glDisable(GL_DEPTH_TEST);
-	ShaderManager::getInstance().setMat4("default", "model", Matrix4{ 1.0f });
-	glPointSize(4.0f);
-	glBindVertexArray(trajectoryVAO);
-	glDrawArrays(GL_POINTS, 0, 100);
-	glBindVertexArray(0);
-	glEnable(GL_DEPTH_TEST);
+	if (curScene->isShowTrajectory())
+	{
+		glDisable(GL_DEPTH_TEST);
+		ShaderManager::getInstance().setMat4("default", "model", Matrix4{ 1.0f });
+		ShaderManager::getInstance().setFloat("default", "transparency", 0.5f);
+		glPointSize(3.0f);
+		glBindVertexArray(trajectoryVAO);
+		glDrawArrays(GL_POINTS, 0, 100);
+		glBindVertexArray(0);
+		glEnable(GL_DEPTH_TEST);
+	}
 
 	// 공 렌더링
 	Matrix4 ballModel{ 1.0f };
@@ -140,4 +166,15 @@ void Ball::render() const
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_RED);
 
 	MeshManager::getInstance().drawMesh("sphere");
+
+	Matrix4 shadowModel{ 1.0f };
+
+	shadowModel = glm::translate(shadowModel, Vector3{ getPos().x, 0.0f, getPos().z });
+	shadowModel = glm::scale(shadowModel, getScale());
+
+	ShaderManager::getInstance().setMat4("default", "model", shadowModel);
+	ShaderManager::getInstance().setFloat("default", "transparency", 0.3f);
+	ShaderManager::getInstance().setVec3("default", "color", COLOR_BLACK);
+
+	MeshManager::getInstance().drawCircle();
 }
