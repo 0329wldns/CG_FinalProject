@@ -167,13 +167,15 @@ void Ball::render() const
 
 	MeshManager::getInstance().drawMesh("sphere");
 
+	// 공 그림자 렌더링
 	Matrix4 shadowModel{ 1.0f };
 
 	shadowModel = glm::translate(shadowModel, Vector3{ getPos().x, 0.0f, getPos().z });
+	shadowModel = glm::rotate(shadowModel, glm::radians(-90.0f), Vector3{ 1.0f, 0.0f, 0.0f });
 	shadowModel = glm::scale(shadowModel, getScale());
 
 	ShaderManager::getInstance().setMat4("default", "model", shadowModel);
-	ShaderManager::getInstance().setFloat("default", "transparency", 0.3f);
+	ShaderManager::getInstance().setFloat("default", "transparency", 0.7f);
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_BLACK);
 
 	MeshManager::getInstance().drawCircle();
