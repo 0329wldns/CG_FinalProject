@@ -3,6 +3,11 @@
 #include "MeshManager.h"
 #include "ShaderManager.h"
 
+Park::Park()
+{
+
+}
+
 void Park::render() const
 {
     Matrix4 model{ 1.0f };
@@ -15,4 +20,8 @@ void Park::render() const
     shader.setFloat("default", "transparency", 1.0f);
 
     MeshManager::getInstance().drawMesh("cube");
+}
+
+void Park::update()
+{
 }

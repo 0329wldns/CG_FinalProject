@@ -82,7 +82,7 @@ void Scene_Start::drawBG() const
 {
 	if (showBG)
 	{
-		park.render();
+		// park.render();
 	}
 	if (showAxis)
 	{
@@ -102,6 +102,9 @@ void Scene_Start::enter()
 	// 스트라이크 존
 	StrikeZone* strikeZone = new StrikeZone();
 	createObject(strikeZone, OBJECT_GROUP::STRIKE_ZONE);
+
+	Park* park = new Park();
+	createObject(park, OBJECT_GROUP::DEFAULT);
 }
 
 void Scene_Start::exit()

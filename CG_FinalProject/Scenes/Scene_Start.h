@@ -32,7 +32,6 @@ public:
 private:
 	Camera* camera;
 	Ball* ball;
-	Park park;
 
 	// 디버그용 플래그들
 	bool showAxis{ false };

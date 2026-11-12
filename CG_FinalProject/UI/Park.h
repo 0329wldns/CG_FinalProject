@@ -1,7 +1,14 @@
 #pragma once
+#include "pch.h"
+#include "Object.h"
 
-class Park
+class Park : public Object
 {
+
 public:
-    void render() const;
+	Park();
+	~Park() = default;
+
+	void update() override;
+	void render() const override;
 };
