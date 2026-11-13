@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "Objects/Object.h"
 
+// 마우스 클릭 위치 시각적 피드백을 위한 UI 오브젝트
 class MousePointer : public Object
 {
 public:
