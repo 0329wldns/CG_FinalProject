@@ -101,7 +101,7 @@ void Scene_Start::drawBG() const
 void Scene_Start::enter()
 {
 	// 카메라
-	camera = new Camera(Vector3(0.0f, 100.0f, 150.0f), Vector3(0.0f, 100.0f, -300.0f));
+	camera = new Camera(Vector3(0.0f, 100.0f, 200.0f), Vector3(0.0f, 100.0f, -300.0f));
 	createObject(camera, OBJECT_GROUP::CAMERA);
 
 	// 스트라이크 존
