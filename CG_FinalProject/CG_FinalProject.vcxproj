@@ -77,7 +77,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Componants;$(ProjectDir)Managers;$(ProjectDir)Scenes;$(ProjectDir)Objects;$(ProjectDir)Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Componants;$(ProjectDir)Managers;$(ProjectDir)Scenes;$(ProjectDir)Objects;$(ProjectDir)UI;$(ProjectDir)Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Componants;$(ProjectDir)Managers;$(ProjectDir)Scenes;$(ProjectDir)Objects;$(ProjectDir)Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Componants;$(ProjectDir)Managers;$(ProjectDir)Scenes;$(ProjectDir)Objects;$(ProjectDir)UI;$(ProjectDir)Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,7 +116,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Componants;$(ProjectDir)Managers;$(ProjectDir)Scenes;$(ProjectDir)Objects;$(ProjectDir)Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Componants;$(ProjectDir)Managers;$(ProjectDir)Scenes;$(ProjectDir)Objects;$(ProjectDir)UI;$(ProjectDir)Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,7 +136,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Componants;$(ProjectDir)Managers;$(ProjectDir)Scenes;$(ProjectDir)Objects;$(ProjectDir)Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Componants;$(ProjectDir)Managers;$(ProjectDir)Scenes;$(ProjectDir)Objects;$(ProjectDir)UI;$(ProjectDir)Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,6 +164,7 @@
     <ClCompile Include="Scenes\Scene_Start.cpp" />
     <ClCompile Include="Managers\ShaderManager.cpp" />
     <ClCompile Include="Managers\TimeManager.cpp" />
+    <ClCompile Include="UI\MousePointer.cpp" />
     <ClCompile Include="UI\Park.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +187,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Managers\TimeManager.h" />
+    <ClInclude Include="UI\MousePointer.h" />
     <ClInclude Include="UI\Park.h" />
   </ItemGroup>
   <ItemGroup>

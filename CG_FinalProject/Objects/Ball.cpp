@@ -1,12 +1,12 @@
-#include "pch.h"
-#include "Ball.h"
-#include "MeshManager.h"
-#include "ShaderManager.h"
-#include "TimeManager.h"
+﻿#include "pch.h"
+#include "Objects/Ball.h"
+#include "Managers/MeshManager.h"
+#include "Managers/ShaderManager.h"
+#include "Managers/TimeManager.h"
 #include "Constants.h"
 #include "EventFunc.h"
-#include "Scene_Start.h"
-#include "SceneManager.h"
+#include "Scenes/Scene_Start.h"
+#include "Managers/SceneManager.h"
 
 Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	: speed(_speed)
@@ -23,7 +23,7 @@ Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	case PITCH_TYPE::STRAIGHT:
 		break;
 	case PITCH_TYPE::CURVE:
-		// 커브볼 - n% 지접을 2번째 컨트롤 포인트로 설정
+		// 커브볼 - n% 지점을 2번째 컨트롤 포인트로 설정
 		midControlPoint = (startPos + destination) * 0.3f;
 		midControlPoint.y = startPos.y;
 		break;
@@ -103,6 +103,8 @@ Ball::Ball(float _speed, Vector3 _destination)
 
 Ball::~Ball()
 {
+	cout << "날아간 거리: " << glm::distance(Vector2(startPos.x, startPos.z), Vector2(destination.x, destination.z)) / 100.0f << "m" << endl;
+	cout << "걸린시간: " << accTime << "초" << endl;
 	cout << "Ball deleted" << endl;
 }
 
@@ -125,14 +127,12 @@ void Ball::update()
 			+ t * t * destination;
 	}
 
-	// 18m를 1초 만에 가려면 64.8km/h
+	// 18m를 1초 만에 가면 64.8km/h
 	t += dt * speed / 64.8f;
 
 	if (t > 1.0f)
 	{
 		deleteObject(this);
-		cout << "날아간 거리: " << glm::distance(Vector2(startPos.x, startPos.z), Vector2(destination.x, destination.z)) / 100.0f << "m" << endl;
-		cout << "걸린시간: " << accTime << "초" << endl;
 	}
 
 	setPos( myPos );
@@ -170,12 +170,12 @@ void Ball::render() const
 	// 공 그림자 렌더링
 	Matrix4 shadowModel{ 1.0f };
 
-	shadowModel = glm::translate(shadowModel, Vector3{ getPos().x, 0.0f, getPos().z });
+	shadowModel = glm::translate(shadowModel, Vector3{ getPos().x, 1.0f, getPos().z });
 	shadowModel = glm::rotate(shadowModel, glm::radians(-90.0f), Vector3{ 1.0f, 0.0f, 0.0f });
 	shadowModel = glm::scale(shadowModel, getScale());
 
 	ShaderManager::getInstance().setMat4("default", "model", shadowModel);
-	ShaderManager::getInstance().setFloat("default", "transparency", 0.7f);
+	ShaderManager::getInstance().setFloat("default", "transparency", 0.5f);
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_BLACK);
 
 	MeshManager::getInstance().drawCircle();

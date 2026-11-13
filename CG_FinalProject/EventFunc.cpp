@@ -1,12 +1,21 @@
 ﻿#include "pch.h"
 #include "EventFunc.h"
-#include "EventManager.h"
+#include "Managers/EventManager.h"
 #include "Constants.h"
 
 void createObject(Object* newObject, OBJECT_GROUP group)
 {
     Event event{};
     event.event = EVENT_TYPE::CREATE_OBJECT;
+    event.lParam = static_cast<void*>(newObject); // 포인터는 void* 로 넘김
+    event.wParam = static_cast<int>(group);       // 그룹(Enum)은 int로 넘김
+    EventManager::getInstance().addEvent(event);
+}
+
+void createUI(Object* newObject, UI_GROUP group)
+{
+    Event event{};
+    event.event = EVENT_TYPE::CREATE_UI;
     event.lParam = static_cast<void*>(newObject); // 포인터는 void* 로 넘김
     event.wParam = static_cast<int>(group);       // 그룹(Enum)은 int로 넘김
     EventManager::getInstance().addEvent(event);

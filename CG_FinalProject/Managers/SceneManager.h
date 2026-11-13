@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
 #include "Singleton.h"
-#include "Scene.h"
+#include "Scenes/Scene.h"
 #include "Constants.h"
 
 // 씬(Scene)의 등록, 전환 및 현재 씬의 생명주기를 총괄하는 매니저

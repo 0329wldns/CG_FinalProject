@@ -1,24 +1,24 @@
-#include "pch.h"
-#include "MeshManager.h"
+﻿#include "pch.h"
+#include "Managers/MeshManager.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
 void MeshManager::init()
 {
-	// 사각형 버퍼세팅
+	// ?ш컖??踰꾪띁?명똿
 	float vertices[]
 	{
-		 0.5f,  0.5f, 1.0f, 1.0f, 1.0f, // 우상단
-		 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // 우하단
-		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // 좌하단
-		-0.5f,  0.5f, 1.0f, 1.0f, 1.0f  // 좌상단
+		 0.5f,  0.5f, 1.0f, 1.0f, 1.0f, // ?곗긽??
+		 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // ?고븯??
+		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // 醫뚰븯??
+		-0.5f,  0.5f, 1.0f, 1.0f, 1.0f  // 醫뚯긽??
 	};
 
 	uint32_t indices[]
 	{
-		0, 3, 1, // 첫 번째 삼각형
-		1, 3, 2  // 두 번째 삼각형
+		0, 3, 1, // 泥?踰덉㎏ ?쇨컖??
+		1, 3, 2  // ??踰덉㎏ ?쇨컖??
 	};
 
 	glGenVertexArrays(1, &quadVAO);
@@ -39,12 +39,12 @@ void MeshManager::init()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	// 삼각형 버퍼세팅
+	// ?쇨컖??踰꾪띁?명똿
 	float triVertices[]
 	{
-		 0.0f,  0.5f, 1.0f, 1.0f, 1.0f, // 상단 꼭짓점
-		-0.5f,  0.5f, 1.0f, 1.0f, 1.0f, // 좌측 하단
-		 0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // 우측 하단
+		 0.0f,  0.5f, 1.0f, 1.0f, 1.0f, // ?곷떒 瑗?쭞??
+		-0.5f,  0.5f, 1.0f, 1.0f, 1.0f, // 醫뚯륫 ?섎떒
+		 0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // ?곗륫 ?섎떒
 	};
 
 	glGenVertexArrays(1, &triangleVAO);
@@ -59,15 +59,15 @@ void MeshManager::init()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	// 바인딩 해제
+	// 諛붿씤???댁젣
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	// 선 버퍼 세팅
+	// ??踰꾪띁 ?명똿
 	float lineVertices[]
 	{
-		-0.5f, 0.0f, 1.0f, 1.0f, 1.0f, // 좌측 끝점
-		 0.5f, 0.0f, 1.0f, 1.0f, 1.0f  // 우측 끝점
+		-0.5f, 0.0f, 1.0f, 1.0f, 1.0f, // 醫뚯륫 ?앹젏
+		 0.5f, 0.0f, 1.0f, 1.0f, 1.0f  // ?곗륫 ?앹젏
 	};
 
 	glGenVertexArrays(1, &lineVAO);
@@ -89,10 +89,11 @@ void MeshManager::init()
 	std::vector<std::array<float, 6>> circlrVertices{};
 	const int segmentCount{ 1000 };
 	const float radius{ 1.0f };
-	circlrVertices.reserve(segmentCount);
+	circlrVertices.reserve(segmentCount + 1);
 
+	// 0번 정점: 원의 중심점 (TRIANGLE_FAN의 기준점)
 	circlrVertices.push_back(std::array<float, 6>{0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f});
-	for (int i{}; i < segmentCount - 1; ++i)
+	for (int i = 0; i < segmentCount; ++i)
 	{
 		float theta{ 2.0f * glm::pi<float>() * static_cast<float>(i) / static_cast<float>(segmentCount) };
 		float x{ radius * std::cos(theta) };
@@ -128,7 +129,7 @@ bool MeshManager::loadOBJ(const std::string& name, const std::string& filePath, 
 	std::ifstream file{ filePath };
 	if (!file.is_open())
 	{
-		std::cerr << "OBJ 파일 열기 실패: " << filePath << '\n';
+		std::cerr << "OBJ ?뚯씪 ?닿린 ?ㅽ뙣: " << filePath << '\n';
 		return false;
 	}
 
@@ -139,7 +140,7 @@ bool MeshManager::loadOBJ(const std::string& name, const std::string& filePath, 
 	};
 
 	std::vector<VertexPosColor> tempVertices{};
-	std::vector<float> finalVertices{}; // GPU로 넘어갈 최종 배열 (x, y, z, r, g, b...)
+	std::vector<float> finalVertices{}; // GPU濡??섏뼱媛?理쒖쥌 諛곗뿴 (x, y, z, r, g, b...)
 
 	std::string line{};
 	while (std::getline(file, line))
@@ -155,14 +156,14 @@ bool MeshManager::loadOBJ(const std::string& name, const std::string& filePath, 
 			VertexPosColor v{};
 			ss >> v.pos.x >> v.pos.y >> v.pos.z;
 
-			// OBJ 파일의 v 줄에 r, g, b 값이 추가로 존재하는지 확인 (확장 OBJ 포맷)
+			// OBJ ?뚯씪??v 以꾩뿉 r, g, b 媛믪씠 異붽?濡?議댁옱?섎뒗吏 ?뺤씤 (?뺤옣 OBJ ?щ㎎)
 			if (ss >> v.color.r >> v.color.g >> v.color.b)
 			{
-				// 파일 자체 색상 사용
+				// ?뚯씪 ?먯껜 ?됱긽 ?ъ슜
 			}
 			else
 			{
-				// 색상이 없으면 C++ 인자로 전달받은 기본 색상 적용
+				// ?됱긽???놁쑝硫?C++ ?몄옄濡??꾨떖諛쏆? 湲곕낯 ?됱긽 ?곸슜
 				v.color = defaultColor;
 			}
 
@@ -177,7 +178,7 @@ bool MeshManager::loadOBJ(const std::string& name, const std::string& filePath, 
 				faceTokens.push_back(token);
 			}
 
-			// 다각형 삼각 분할
+			// ?ㅺ컖???쇨컖 遺꾪븷
 			for (size_t i{ 1 }; i + 1 < faceTokens.size(); ++i)
 			{
 				std::array<std::string, 3> triangleTokens{ faceTokens[0], faceTokens[i], faceTokens[i + 1] };
@@ -195,7 +196,7 @@ bool MeshManager::loadOBJ(const std::string& name, const std::string& filePath, 
 
 						const VertexPosColor& v{ tempVertices[vIdx - 1] };
 
-						// 1개 정점당 6개 float 데이터 푸시 (x, y, z, r, g, b)
+						// 1媛??뺤젏??6媛?float ?곗씠???몄떆 (x, y, z, r, g, b)
 						finalVertices.push_back(v.pos.x);
 						finalVertices.push_back(v.pos.y);
 						finalVertices.push_back(v.pos.z);
@@ -213,7 +214,7 @@ bool MeshManager::loadOBJ(const std::string& name, const std::string& filePath, 
 	if (finalVertices.empty()) return false;
 
 	MeshData meshData{};
-	// 정점 1개당 float 6개(위치 3 + 색상 3)이므로 6으로 나눔
+	// ?뺤젏 1媛쒕떦 float 6媛??꾩튂 3 + ?됱긽 3)?대?濡?6?쇰줈 ?섎닎
 	meshData.vertexCount = static_cast<uint32_t>(finalVertices.size() / 6);
 
 	glGenVertexArrays(1, &meshData.VAO);
@@ -263,7 +264,7 @@ void MeshManager::updateMeshColors(const std::string& name, const std::vector<gl
 	MeshData& mesh{ iter->second };
 	if (colors.size() < mesh.vertexCount) return;
 
-	// GPU VRAM 버퍼(VBO)의 데이터를 부분 갱신하여 즉각 반영
+	// GPU VRAM 踰꾪띁(VBO)???곗씠?곕? 遺遺?媛깆떊?섏뿬 利됯컖 諛섏쁺
 	glBindBuffer(GL_ARRAY_BUFFER, mesh.VBO);
 	for (size_t i = 0; i < mesh.vertexCount; ++i)
 	{
@@ -320,13 +321,10 @@ void MeshManager::drawLine() const
 
 void MeshManager::drawCircle(bool drawLine) const
 {
-	if (drawLine) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
 	glBindVertexArray(circleVAO);
-	glDrawArrays(GL_LINE_LOOP, 0, 1000);
+	if (drawLine) glDrawArrays(GL_LINE_LOOP, 1, 1000);
+	else glDrawArrays(GL_TRIANGLE_FAN, 0, 1001);
 	glBindVertexArray(0);
-
-	if (drawLine) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void MeshManager::drawDot() const

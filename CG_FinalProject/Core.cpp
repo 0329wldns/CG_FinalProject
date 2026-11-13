@@ -1,14 +1,14 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Core.h"
 #include "Constants.h"
 
-#include "KeyManager.h"
-#include "SceneManager.h"
-#include "EventManager.h"
-#include "CollisionManager.h"
-#include "TimeManager.h"
-#include "ShaderManager.h"
-#include "MeshManager.h"
+#include "Managers/KeyManager.h"
+#include "Managers/SceneManager.h"
+#include "Managers/EventManager.h"
+#include "Managers/CollisionManager.h"
+#include "Managers/TimeManager.h"
+#include "Managers/ShaderManager.h"
+#include "Managers/MeshManager.h"
 
 Core::~Core()
 {

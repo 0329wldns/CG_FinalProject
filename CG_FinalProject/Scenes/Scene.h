@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
-#include "Object.h"
+#include "Objects/Object.h"
 #include "Constants.h"
 
 class Scene
@@ -63,6 +63,4 @@ private:
 private:
 	vector<Object*> object[(int)OBJECT_GROUP::END];
 	vector<Object*> ui[(int)UI_GROUP::END];
-
-	Object* focusedObject{ nullptr };
 };

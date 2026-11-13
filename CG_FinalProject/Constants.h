@@ -54,6 +54,7 @@ enum class UI_GROUP
 {
 	DEFAULT,	// 일반 2D HUD 패널, 텍스트
 	BUTTON,		// 클릭 가능한 버튼 UI
+	MOUSE_POINTER,	// 마우스 포인터 UI
 
 	END			// 그룹 개수 파악용
 };

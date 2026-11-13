@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
-#include "Object.h"
-#include "Camera.h"
+#include "Objects/Object.h"
+#include "Objects/Camera.h"
 
 enum class PITCH_TYPE
 {
@@ -27,13 +27,13 @@ public:
 	void render() const override;
 
 	float getT() const { return t; }
-	Vector3  getDestination() const { return destination; }
+	Vector3 getDestination() const { return destination; }
 
 private:
 	// 공의 구종
 	PITCH_TYPE pitchType{};
 
-	// 공의 타격 후 날아갈 방향, 단위 벡터로 쓸거임
+	// 공의 타격 후 날아가는 방향 (단위 벡터)
 	Vector3 direction{};
 
 	// 공이 던져진 위치 및 타격된 위치
@@ -52,11 +52,9 @@ private:
 	uint32_t trajectoryVAO{};
 	uint32_t trajectoryVBO{};
 
-	// 공의 이동 속력
-	// km/h 단위
+	// 공의 이동 속력 (km/h 단위)
 	float speed{ 0.0f };
 
-	// 디버그용
-	// 공이 끝까지 가는 데 걸린시간
+	// 디버그용: 공이 끝까지 가는 데 걸린 시간
 	float accTime{ 0.0f };
 };

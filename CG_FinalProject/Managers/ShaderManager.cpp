@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "ShaderManager.h"
+#include "Managers/ShaderManager.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -31,6 +31,10 @@ void ShaderManager::init()
 	glm::mat4 ortho{ glm::ortho(0.0f, (float)SCREEN_WIDTH, 0.0f, (float)SCREEN_HEIGHT, -100.0f, 100.0f) };
 	ShaderManager::getInstance().useProgram("UI");
 	ShaderManager::getInstance().setMat4("UI", "projection", ortho);
+
+	// 알파 블렌딩 활성화
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void ShaderManager::useProgram(const std::string& name)

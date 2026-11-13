@@ -1,5 +1,5 @@
-#include "pch.h"
-#include "KeyManager.h"
+﻿#include "pch.h"
+#include "Managers/KeyManager.h"
 #include "Constants.h"
 
 #include "Core.h"
@@ -60,8 +60,8 @@ void KeyManager::update()
 	glfwGetCursorPos(window, &mouseX, &mouseY);
 	mouseY = SCREEN_HEIGHT - mouseY;
 
-	curMousePos.x = (float)mouseX - (float)SCREEN_WIDTH / 2.0f;
-	curMousePos.y = (float)mouseY - (float)SCREEN_HEIGHT / 2.0f;
+	curMousePos.x = (float)mouseX;
+	curMousePos.y = (float)mouseY;
 
 	for (int i{}; i < (int)KEY::LAST; ++i)
 	{

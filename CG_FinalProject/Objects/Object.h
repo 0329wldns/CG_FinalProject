@@ -1,6 +1,6 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
-#include "Collider.h"
+#include "Componants/Collider.h"
 
 class Collider;
 
@@ -12,14 +12,15 @@ public:
 	virtual ~Object();
 
 	// 충돌체가 필요한 오브젝트인 경우 호출하여 생성
-	// 생성된 충돌체는 오브젝트 소멸 시 자동 해제됨
+	// 생성된 콜라이더는 오브젝트 소멸 시 자동 해제됨
 	void createCollider();
+	void creaeteAnimator() {};
 
 	// 매 프레임 오브젝트 로직(이동, 애니메이션 등) 업데이트
 	// 각 오브젝트마다 고유한 동작을 해야 하므로 순수 가상 함수로 선언
 	virtual void update() = 0;
 
-	// 오브젝트 로직 처리 후 충돌체 위치 동기화
+	// 오브젝트 로직 처리 후 콜라이더 위치 등을 최종 동기화
 	// 프레임워크 내부에서 호출하며, 자식에서 override하지 않도록 final 선언
 	virtual void finalUpdate() final;
 
@@ -60,7 +61,7 @@ public:
 	void setScale(int _scaleX, int _scaleY, int _scaleZ) { scale.x = (float)_scaleX; scale.y = (float)_scaleY; scale.z = (float)_scaleZ; }
 	void setScale(double _scaleX, double _scaleY, double _scaleZ) { scale.x = (float)_scaleX; scale.y = (float)_scaleY; scale.z = (float)_scaleZ; }
 
-	// getter 함수들
+	// 게터 함수들
 	Vector3 getPos() const { return pos; }
 	Vector3 getScale() const { return scale; }
 	Collider* getCollider() const { return collider; }
@@ -71,7 +72,7 @@ public:
 
 private:
 	// 오브젝트를 삭제 대기 상태로 변경
-	// 직접 호출하지 않고, EventManager를 통해 호출되도록 함
+	// 직접 호출하지 말고 EventFunc의 deleteObject()를 사용할 것
 	void setDead() { alive = false; }
 
 private:

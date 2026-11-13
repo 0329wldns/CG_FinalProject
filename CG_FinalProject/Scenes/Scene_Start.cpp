@@ -1,26 +1,28 @@
 ﻿#include "pch.h"
-#include "Scene_Start.h"
-#include "KeyManager.h"
+#include "Scenes/Scene_Start.h"
+#include "Managers/KeyManager.h"
 #include "EventFunc.h"
-#include "Ball.h"
-#include "StrikeZone.h"
+#include "Objects/Ball.h"
+#include "Objects/StrikeZone.h"
 #include "Constants.h"
+#include "Managers/ShaderManager.h"
+#include "UI/MousePointer.h"
 
 void Scene_Start::processKeyInput()
 {
-	const KeyManager& keyManager{ KeyManager::getInstance() };
+	KeyManager& keyManager{ KeyManager::getInstance() };
 
 	// 직구 던지기
 	if (keyManager.getKeyState(KEY::NUM1) == KEY_STATE::TAP)
 	{
 		Vector3 destination{ STRIKE_ZONE::CENTER };
-		ball = new Ball(150.0f, destination, PITCH_TYPE::STRAIGHT);
+		ball = new Ball(10.0f, destination, PITCH_TYPE::STRAIGHT);
 		createObject(ball, OBJECT_GROUP::BALL);
 	}
 	// 커브볼 던지기
 	if (keyManager.getKeyState(KEY::NUM2) == KEY_STATE::TAP)
 	{
-		Vector3 destination{ 0.0f, STRIKE_ZONE::CENTER.y - STRIKE_ZONE::HEIGHT / 2.0f, 0.0f };
+		Vector3 destination{ STRIKE_ZONE::CENTER };
 		ball = new Ball(120.0f, destination, PITCH_TYPE::CURVE);
 		createObject(ball, OBJECT_GROUP::BALL);
 	}
@@ -70,6 +72,14 @@ void Scene_Start::processKeyInput()
 	{
 		camera->setPos(Vector3(500.0f, 150.0f, 150.0f));
 	}
+
+	// 마우스
+	if (keyManager.getKeyState(KEY::MOUSE_L) == KEY_STATE::TAP)
+	{
+		Vector2 mousePos{ keyManager.getMousePos() };
+		MousePointer* mousePointer = new MousePointer(mousePos);
+		createUI(mousePointer, UI_GROUP::MOUSE_POINTER);
+	}
 }
 
 void Scene_Start::update()
@@ -80,16 +90,11 @@ void Scene_Start::update()
 
 void Scene_Start::drawBG() const
 {
-	if (showBG)
-	{
-		// park.render();
-	}
 	if (showAxis)
 	{
 		Scene::drawAxis();
 	}
 	Scene::drawGrid(showGridXZ, showGridYZ, showGridXY);
-
 
 }
 

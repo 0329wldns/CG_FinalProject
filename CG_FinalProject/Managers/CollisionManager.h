@@ -1,9 +1,9 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
 #include "Singleton.h"
-#include "SceneManager.h"
-#include "Object.h"
-#include "Collider.h"
+#include "Managers/SceneManager.h"
+#include "Objects/Object.h"
+#include "Componants/Collider.h"
 #include "Constants.h"
 
 // 두 콜라이더 간의 충돌 쌍(Pair)을 고유한 64비트 정수로 식별하기 위한 공용체

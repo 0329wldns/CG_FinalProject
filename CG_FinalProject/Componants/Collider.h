@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
 #include "Core.h"
-#include "Object.h"
+#include "Objects/Object.h"
 
 class Object;
 
@@ -17,18 +17,17 @@ public:
 	// 디버그용 충돌 영역 렌더링 (초록색/빨간색 와이어프레임)
 	void render();
 
-	// CollisionManager에서 충돌 판정 시 소유자 오브젝트로 이벤트를 전달하는 함수들
+	// CollisionManager에서 충돌 판정 시 소유자 오브젝트로 이벤트를 전달하는 함수
 	// 충돌이 처음 발생했을 때 호출
 	void onCollisionEnter(Collider*);
 
 	// 충돌 유지 중일 때 호출
-	void onCollision(Collider*);		
+	void onCollision(Collider*);
 
 	// 충돌에서 벗어날 때 호출
 	void onCollisionExit(Collider*);
 
-
-	// 출돌체 위치 및 크기 설정
+	// 충돌체 위치 및 크기 설정
 	void setPos(Vector2 _pos) { pos = _pos; }
 	void setPos(float _posX, float _posY) { pos.x = _posX; pos.y = _posY; }
 	void setScale(Vector2 _scale) { scale = _scale; }

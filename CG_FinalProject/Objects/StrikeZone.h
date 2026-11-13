@@ -1,6 +1,6 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
-#include "Object.h"
+#include "Objects/Object.h"
 
 class StrikeZone : public Object
 {

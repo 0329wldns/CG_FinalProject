@@ -1,14 +1,15 @@
 ﻿#include "pch.h"
-#include "Scene.h"
-#include "KeyManager.h"
-#include "MeshManager.h"
-#include "ShaderManager.h"
+#include "Scenes/Scene.h"
+#include "Managers/KeyManager.h"
+#include "Managers/MeshManager.h"
+#include "Managers/ShaderManager.h"
 
 void Scene::update()
 {
 	processKeyInput();
 	processMouseInput();
 
+	// 오브젝트 업데이트
 	for (int i =  0; i < (int)OBJECT_GROUP::END; ++i)
 	{
 		auto iter = object[i].begin();
@@ -20,9 +21,24 @@ void Scene::update()
 			}
 			else
 			{
-				if (focusedObject == *iter)
-					focusedObject = nullptr;
 				iter = object[i].erase(iter);
+			}
+		}
+	}
+
+	// UI 업데이트
+	for (int i = 0; i < (int)UI_GROUP::END; ++i)
+	{
+		auto iter = ui[i].begin();
+		for (; iter != ui[i].end();) {
+			if (!(*iter)->isDead())
+			{
+				(*iter)->update();
+				++iter;
+			}
+			else
+			{
+				iter = ui[i].erase(iter);
 			}
 		}
 	}
@@ -209,7 +225,6 @@ void Scene::reset()
 		}
 		object[i].clear();
 	}
-	focusedObject = nullptr;
 
 	// UI 리셋
 	for (int i = 0; i < (int)UI_GROUP::END; ++i)
@@ -234,54 +249,5 @@ void Scene::addUI(Object* obj, UI_GROUP group)
 
 const void Scene::processMouseInput()
 {
-	Vector2 mousePos{ KeyManager::getInstance().getMousePos() };
-
 	
-	for (int i = (int)OBJECT_GROUP::END - 1; i >= 0; --i)
-	{
-		for (int j = object[i].size() - 1; j >= 0; --j)
-		{
-			Vector2 myPos{ object[i][j]->getPos() };
-			Vector2 myScale{ object[i][j]->getScale() };
-
-			if (mousePos.x > myPos.x - myScale.x && mousePos.x < myPos.x + myScale.x &&
-				mousePos.y > myPos.y - myScale.y && mousePos.y < myPos.y + myScale.y)
-			{
-				focusedObject = object[i][j];
-
-				focusedObject->onMouseEnter();
-				if (KeyManager::getInstance().getKeyState(KEY::MOUSE_L) == KEY_STATE::TAP)	//	마우스 좌클릭
-				{
-					focusedObject->onMouseDownLeft();
-				}
-				else if (KeyManager::getInstance().getKeyState(KEY::MOUSE_R) == KEY_STATE::TAP)	// 마우스 우클릭
-				{
-						focusedObject->onMouseDownRight();
-				}
-				break;
-			}
-		}
-	}
-
-	if (focusedObject)
-	{
-		Vector2 myPos{ focusedObject->getPos() };
-		Vector2 myScale{ focusedObject->getScale() };
-
-		if (!(mousePos.x > myPos.x - myScale.x && mousePos.x < myPos.x + myScale.x &&
-			mousePos.y > myPos.y - myScale.y && mousePos.y < myPos.y + myScale.y))
-		{
-			focusedObject->onMouseLeave();
-			focusedObject = nullptr;
-		}
-
-		if (KeyManager::getInstance().getKeyState(KEY::MOUSE_L) == KEY_STATE::AWAY)	//	마우스 좌클릭
-		{
-			focusedObject->onMouseUpLeft();
-		}
-		else if (KeyManager::getInstance().getKeyState(KEY::MOUSE_R) == KEY_STATE::AWAY)	// 마우스 우클릭
-		{
-			focusedObject->onMouseUpRight();
-		}
-	}
 }

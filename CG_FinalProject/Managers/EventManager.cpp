@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
-#include "EventManager.h"
-#include "SceneManager.h"
+#include "Managers/EventManager.h"
+#include "Managers/SceneManager.h"
 
 EventManager::~EventManager()
 {
@@ -26,6 +26,13 @@ void EventManager::excute(const Event& _event)
 		// lParam : object address
 		// wParam : group type
 		SceneManager::getInstance().getCurScene()->addObject((Object*)_event.lParam, (OBJECT_GROUP)_event.wParam);
+		break;
+	}
+	case EVENT_TYPE::CREATE_UI:
+	{
+		// lParam : object address
+		// wParam : group type
+		SceneManager::getInstance().getCurScene()->addUI((Object*)_event.lParam, (UI_GROUP)_event.wParam);
 		break;
 	}
 	case EVENT_TYPE::DELETE_OBJECT:

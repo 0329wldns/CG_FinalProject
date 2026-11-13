@@ -1,5 +1,5 @@
-#include "pch.h"
-#include "CollisionManager.h"
+﻿#include "pch.h"
+#include "Managers/CollisionManager.h"
 
 void CollisionManager::update()
 {
@@ -63,10 +63,10 @@ void CollisionManager::collisionGroupUpdate(OBJECT_GROUP left, OBJECT_GROUP righ
 				iter = collisionInfo.find(id.id);
 			}
 
-			// 충돌
+			// 異⑸룎
 			if (isCollision(leftCol, rightCol))
 			{
-				// 이전에도 충돌이 있었다
+				// ?댁쟾?먮룄 異⑸룎???덉뿀??
 				if (iter->second)
 				{
 					if (leftCol->getObj()->isDead() || rightCol->getObj()->isDead())
@@ -81,7 +81,7 @@ void CollisionManager::collisionGroupUpdate(OBJECT_GROUP left, OBJECT_GROUP righ
 						rightCol->onCollision(leftCol);
 					}
 				}
-				// 이전에는 충돌이 없었다
+				// ?댁쟾?먮뒗 異⑸룎???놁뿀??
 				else
 				{
 					if (!leftCol->getObj()->isDead() && !rightCol->getObj()->isDead())
@@ -94,7 +94,7 @@ void CollisionManager::collisionGroupUpdate(OBJECT_GROUP left, OBJECT_GROUP righ
 			}
 			else
 			{
-				// 이전에는 충돌이 있었다
+				// ?댁쟾?먮뒗 異⑸룎???덉뿀??
 				if (iter->second)
 				{
 					leftCol->onCollisionExit(rightCol);
@@ -108,7 +108,7 @@ void CollisionManager::collisionGroupUpdate(OBJECT_GROUP left, OBJECT_GROUP righ
 
 bool CollisionManager::isCollision(const Collider* leftCol, const Collider* rightCol) const
 {
-	// 현재는 2D AABB 충돌만 지원
+	// ?꾩옱??2D AABB 異⑸룎留?吏??
 
 	if ((leftCol->getPos().x - leftCol->getScale().x < rightCol->getPos().x + rightCol->getScale().x
 		&& leftCol->getPos().x + leftCol->getScale().x > rightCol->getPos().x - rightCol->getScale().x

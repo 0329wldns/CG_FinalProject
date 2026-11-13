@@ -1,7 +1,7 @@
-#include "pch.h"
-#include "Camera.h"
-#include "ShaderManager.h"
-#include "TimeManager.h"
+﻿#include "pch.h"
+#include "Objects/Camera.h"
+#include "Managers/ShaderManager.h"
+#include "Managers/TimeManager.h"
 
 Camera::Camera(Vector3 _pos)
 	: t(0.0f)

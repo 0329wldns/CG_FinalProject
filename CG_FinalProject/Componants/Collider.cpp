@@ -1,9 +1,9 @@
 ﻿#include "pch.h"
-#include "collider.h"
-#include "KeyManager.h"
-#include "SceneManager.h"
-#include "ShaderManager.h"
-#include "MeshManager.h"
+#include "Componants/Collider.h"
+#include "Managers/KeyManager.h"
+#include "Managers/SceneManager.h"
+#include "Managers/ShaderManager.h"
+#include "Managers/MeshManager.h"
 
 static unsigned int g_Id{ 0 };
 

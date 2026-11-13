@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
-#include "Object.h"
-#include "TimeManager.h"
+#include "Objects/Object.h"
+#include "Managers/TimeManager.h"
 
 Object::Object()
 	: pos()

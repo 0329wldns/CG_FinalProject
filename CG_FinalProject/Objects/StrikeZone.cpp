@@ -1,8 +1,8 @@
-#include "pch.h"
-#include "StrikeZone.h"
+﻿#include "pch.h"
+#include "Objects/StrikeZone.h"
 #include "Constants.h"
-#include "ShaderManager.h"
-#include "MeshManager.h"
+#include "Managers/ShaderManager.h"
+#include "Managers/MeshManager.h"
 
 StrikeZone::StrikeZone()
 {
