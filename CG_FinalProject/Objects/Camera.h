@@ -16,9 +16,11 @@ public:
 
 	void setAt(Vector3 _at);
 	void setAtImediate(Vector3 _at) { at = _at; oldAt = _at; t = 0.0f; }
+	void toggleTopView() { topView = !topView; }// 탑 뷰 모드 추가
 
 private:
 	Vector3 oldAt;
 	Vector3 at;
 	float t;
+	bool topView = false; // 탑 뷰 모드 여부
 };

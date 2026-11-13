@@ -121,6 +121,8 @@ void MeshManager::init()
 	loadOBJ("pyramid", "res/pyramid.obj", glm::vec3(1.0f, 1.0f, 1.0f));
 	loadOBJ("sphere", "res/sphere_16x16.obj", glm::vec3(1.0f, 1.0f, 1.0f));
 	loadOBJ("home_plate", "res/home_plate.obj", glm::vec3(1.0f, 1.0f, 1.0f));
+	loadOBJ("home_dirt", "res/home_dirt.obj", glm::vec3(1.0f, 1.0f, 1.0f));
+	loadOBJ("pitcher_mound", "res/pitcher_mound.obj", glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 bool MeshManager::loadOBJ(const std::string& name, const std::string& filePath, const glm::vec3& defaultColor)

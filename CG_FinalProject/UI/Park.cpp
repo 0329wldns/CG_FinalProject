@@ -21,6 +21,29 @@ void Park::render() const
 	shader.setFloat("default", "transparency", 1.0f);
 
 	MeshManager::getInstance().drawMesh("cube");
+
+	// 홈플레이트와 양쪽 타자석을 감싸는 흙 바닥
+	Matrix4 dirtModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.6f, -40.0f });
+	dirtModel = glm::scale(dirtModel, Vector3{ 150.0f, 1.0f, 150.0f });
+	shader.setMat4("default", "model", dirtModel);
+	shader.setVec3("default", "color", Vector3{ 0.55f, 0.32f, 0.17f });
+	MeshManager::getInstance().drawMesh("home_dirt");
+
+	// 투수 마운드의 흙 영역, 투수 마운드는 기본적으로 경사져있음
+	Matrix4 moundModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.6f, -1800.0f });
+
+	shader.setMat4("default", "model", moundModel);
+	shader.setVec3("default", "color", Vector3{ 0.55f, 0.32f, 0.17f });
+	MeshManager::getInstance().drawMesh("pitcher_mound");
+
+	// 투수판 밑면을 마운드 윗면에 맞춘다.
+	Matrix4 moundBaseModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 27.5f, -1800.0f });
+	moundBaseModel = glm::scale(moundBaseModel, Vector3{ 61.0f, 4.0f, 15.2f });
+
+	shader.setMat4("default", "model", moundBaseModel);
+	shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
+	MeshManager::getInstance().drawMesh("cube");
+
 	//홈플레이트 추가
 	Matrix4 homePlateModel{ 1.0f };
 
@@ -70,6 +93,50 @@ void Park::render() const
 
 		shader.setMat4("default", "model", foulLineModel);
 		MeshManager::getInstance().drawMesh("cube");
+	}
+
+	// 1루와 3루 추가
+	const Vector3 baseScale{ 70.0f, 14.0f, 70.0f };
+	const float cornerOffset = baseScale.x / glm::sqrt(2.0f);
+	for (const float side : { 1.0f, -1.0f })
+	{
+		Matrix4 baseModel{ 1.0f };
+		baseModel = glm::translate(baseModel, Vector3{ side * end.x, 7.5f, end.z - cornerOffset });
+		baseModel = glm::rotate(baseModel, glm::radians(45.0f), Vector3{ 0.0f, 1.0f, 0.0f });
+		baseModel = glm::scale(baseModel, baseScale);
+
+		shader.setMat4("default", "model", baseModel);
+		MeshManager::getInstance().drawMesh("cube");
+	}
+
+	// 2루 추가
+
+	// 2루 베이스
+	const Vector3 secondBasePos{ 0.0f, 7.5f, end.z * 2.0f };
+	const Vector3 up{ 0.0f, 1.0f, 0.0f };
+	auto& meshes = MeshManager::getInstance();
+
+	Matrix4 secondBaseModel = glm::translate(Matrix4{ 1.0f }, secondBasePos);
+	secondBaseModel = glm::rotate(secondBaseModel, glm::radians(45.0f), up);
+	secondBaseModel = glm::scale(secondBaseModel, Vector3{ 70.0f, 14.0f, 70.0f });
+
+	shader.setMat4("default", "model", secondBaseModel);
+	meshes.drawMesh("cube");
+
+	// 1루와 3루에서 각각 2루로 이어지는 확인용 선
+	const Vector3 to{ secondBasePos.x, 4.5f, secondBasePos.z };
+
+	for (const float side : { 1.0f, -1.0f })
+	{
+		const Vector3 from{ side * end.x, 4.5f, end.z - cornerOffset };
+		const Vector3 direction = to - from;
+
+		Matrix4 lineModel = glm::translate(Matrix4{ 1.0f }, (from + to) * 0.5f);
+		lineModel = glm::rotate(lineModel, glm::atan(direction.x, direction.z), up);
+		lineModel = glm::scale(lineModel, Vector3{ 16.0f, 8.0f, glm::length(direction) });
+
+		shader.setMat4("default", "model", lineModel);
+		meshes.drawMesh("cube");
 	}
 
 }

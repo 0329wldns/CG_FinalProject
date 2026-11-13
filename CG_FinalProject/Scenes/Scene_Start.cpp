@@ -62,6 +62,10 @@ void Scene_Start::processKeyInput()
 	{
 		showTrajectory = !showTrajectory;
 	}
+	if (keyManager.getKeyState(KEY::F7) == KEY_STATE::TAP)
+	{
+		camera->toggleTopView();
+	}
 
 	if (keyManager.getKeyState(KEY::F11) == KEY_STATE::TAP)
 	{
