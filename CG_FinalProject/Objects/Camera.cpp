@@ -35,7 +35,7 @@ void Camera::update()
 		const float halfWidth = halfHeight * aspect;
 
 		const Matrix4 projection = glm::ortho(
-			-halfWidth, halfWidth, -halfHeight, halfHeight, 0.1f, visibleRange);
+			-halfWidth, halfWidth, -halfHeight, halfHeight, 0.1f, VISIBLE_RANGE);
 
 		// 바로 위에서 내려다보고, 외야(-Z)가 화면 위쪽을 향하게 한다.
 		const Matrix4 view = glm::lookAt(Vector3{ 0.0f, 5000.0f, 0.0f },Vector3{ 0.0f, 0.0f, 0.0f },Vector3{ 0.0f,0.0f, -1.0f });
@@ -45,7 +45,7 @@ void Camera::update()
 		return;
 	}
 
-	shader.setMat4("default", "projection",glm::perspective(glm::radians(60.0f), aspect, 0.1f, visibleRange));
+	shader.setMat4("default", "projection",glm::perspective(glm::radians(60.0f), aspect, 0.1f, VISIBLE_RANGE));
 
 	float dt{ TimeManager::getInstance().getDeltaTime() };
 	Vector3 myPos{ getPos() };

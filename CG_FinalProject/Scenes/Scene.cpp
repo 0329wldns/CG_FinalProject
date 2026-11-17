@@ -104,7 +104,7 @@ void Scene::drawAxis() const
 {
 	// X축
 	glm::mat4 model{ 1.0f };
-	model = glm::scale(model, Vector3(visibleRange, 1.0f, 1.0f));
+	model = glm::scale(model, Vector3(VISIBLE_RANGE, 1.0f, 1.0f));
 
 	ShaderManager::getInstance().setMat4("default", "model", model);
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_RED);
@@ -115,7 +115,7 @@ void Scene::drawAxis() const
 	// Y축
 	model = glm::mat4(1.0f);
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::scale(model, Vector3(visibleRange, 1.0f, 1.0f));
+	model = glm::scale(model, Vector3(VISIBLE_RANGE, 1.0f, 1.0f));
 	ShaderManager::getInstance().setMat4("default", "model", model);
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_GREEN);
 
@@ -124,7 +124,7 @@ void Scene::drawAxis() const
 	// Z축
 	model = glm::mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::scale(model, Vector3(visibleRange, 1.0f, 1.0f));
+	model = glm::scale(model, Vector3(VISIBLE_RANGE, 1.0f, 1.0f));
 	ShaderManager::getInstance().setMat4("default", "model", model);
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_BLUE);
 
@@ -141,22 +141,22 @@ void Scene::drawGrid(bool xz, bool yz, bool xy) const
 	// XY 평면
 	if (xy)
 	{
-		for (float i = -visibleRange / 2.0f; i <= visibleRange / 2.0f; i += gridSpacing)
+		for (float i = -VISIBLE_RANGE / 2.0f; i <= VISIBLE_RANGE / 2.0f; i += gridSpacing)
 		{
 			glm::mat4 model{ 1.0f };
 			model = glm::translate(model, Vector3(0.0f, i, 0.0f));
 			model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			model = glm::scale(model, Vector3(visibleRange * 2, 1.0f, 1.0f));
+			model = glm::scale(model, Vector3(VISIBLE_RANGE * 2, 1.0f, 1.0f));
 			ShaderManager::getInstance().setMat4("default", "model", model);
 			MeshManager::getInstance().drawLine();
 		}
-		for (float i = -visibleRange / 2.0f; i <= visibleRange / 2.0f; i += gridSpacing)
+		for (float i = -VISIBLE_RANGE / 2.0f; i <= VISIBLE_RANGE / 2.0f; i += gridSpacing)
 		{
 			glm::mat4 model{ 1.0f };
 			model = glm::translate(model, Vector3(i, 0.0f, 0.0f));
 			model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 			model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			model = glm::scale(model, Vector3(visibleRange * 2, 1.0f, 1.0f));
+			model = glm::scale(model, Vector3(VISIBLE_RANGE * 2, 1.0f, 1.0f));
 			ShaderManager::getInstance().setMat4("default", "model", model);
 			MeshManager::getInstance().drawLine();
 		}
@@ -166,22 +166,22 @@ void Scene::drawGrid(bool xz, bool yz, bool xy) const
 	if (xz)
 	{
 		// 가로선
-		for (float i = -visibleRange / 2.0f; i <= visibleRange / 2.0f; i += gridSpacing)
+		for (float i = -VISIBLE_RANGE / 2.0f; i <= VISIBLE_RANGE / 2.0f; i += gridSpacing)
 		{
 			glm::mat4 model{ 1.0f };
 			model = glm::translate(model, Vector3(0.0f, 0.0f, i));
-			model = glm::scale(model, Vector3(visibleRange * 2, 1.0f, 1.0f));
+			model = glm::scale(model, Vector3(VISIBLE_RANGE * 2, 1.0f, 1.0f));
 			ShaderManager::getInstance().setMat4("default", "model", model);
 			MeshManager::getInstance().drawLine();
 		}
 
 		// 세로선
-		for (float i = -visibleRange / 2.0f; i <= visibleRange / 2.0f; i += gridSpacing)
+		for (float i = -VISIBLE_RANGE / 2.0f; i <= VISIBLE_RANGE / 2.0f; i += gridSpacing)
 		{
 			glm::mat4 model{ 1.0f };
 			model = glm::translate(model, Vector3(i, 0.0f, 0.0f));
 			model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			model = glm::scale(model, Vector3(visibleRange * 2, 1.0f, 1.0f));
+			model = glm::scale(model, Vector3(VISIBLE_RANGE * 2, 1.0f, 1.0f));
 			ShaderManager::getInstance().setMat4("default", "model", model);
 			MeshManager::getInstance().drawLine();
 		}
@@ -191,23 +191,23 @@ void Scene::drawGrid(bool xz, bool yz, bool xy) const
 	if (yz)
 	{
 		// 가로선
-		for (float i = -visibleRange / 2.0f; i <= visibleRange / 2.0f; i += gridSpacing)
+		for (float i = -VISIBLE_RANGE / 2.0f; i <= VISIBLE_RANGE / 2.0f; i += gridSpacing)
 		{
 			glm::mat4 model{ 1.0f };
 			model = glm::translate(model, Vector3(0.0f, 0.0f, i));
 			model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-			model = glm::scale(model, Vector3(visibleRange * 2, 1.0f, 1.0f));
+			model = glm::scale(model, Vector3(VISIBLE_RANGE * 2, 1.0f, 1.0f));
 			ShaderManager::getInstance().setMat4("default", "model", model);
 			MeshManager::getInstance().drawLine();
 		}
 
 		// 세로선
-		for (float i = -visibleRange / 2.0f; i <= visibleRange / 2.0f; i += gridSpacing)
+		for (float i = -VISIBLE_RANGE / 2.0f; i <= VISIBLE_RANGE / 2.0f; i += gridSpacing)
 		{
 			glm::mat4 model{ 1.0f };
 			model = glm::translate(model, Vector3(0.0f, i, 0.0f));
 			model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			model = glm::scale(model, Vector3(visibleRange * 2, 1.0f, 1.0f));
+			model = glm::scale(model, Vector3(VISIBLE_RANGE * 2, 1.0f, 1.0f));
 			ShaderManager::getInstance().setMat4("default", "model", model);
 			MeshManager::getInstance().drawLine();
 		}
