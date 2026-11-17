@@ -16,6 +16,9 @@ public:
 	// 시작 씬 전용 키 입력 처리 (모드 선택 등)
 	void processKeyInput() override;
 
+	// 스크린 공간의 마우스 좌표를 월드 공간의 XY평면상 좌표로 변환하여 반환
+	Vector3 getWorldMousePos() const;
+
 	// 씬 로직 업데이트 (오브젝트 업데이트를 위해 내부에서 Scene::update() 호출 필수)
 	void update() override;
 

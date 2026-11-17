@@ -83,13 +83,43 @@ void Scene_Start::processKeyInput()
 		Vector2 mousePos{ keyManager.getMousePos() };
 		MousePointer* mousePointer = new MousePointer(mousePos);
 		createUI(mousePointer, UI_GROUP::MOUSE_POINTER);
+
+		Vector3 worldMousePos{ getWorldMousePos() };
+		cout << worldMousePos.x << ", " << worldMousePos.y << ", " << worldMousePos.z << endl;
 	}
+}
+
+Vector3 Scene_Start::getWorldMousePos() const
+{
+	Vector3 mousePos{ KeyManager::getInstance().getMousePos(), -1.0f };
+	mousePos.y = SCREEN_HEIGHT - mousePos.y;
+	float aspact{ (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT };
+
+	cout << "Mouse Pos: " << mousePos.x << ", " << mousePos.y << endl;
+
+	Vector3 cameraSpaceMouseDir{};
+	cameraSpaceMouseDir.x = (2.0f * mousePos.x / SCREEN_WIDTH - 1.0f) * (glm::tan(glm::radians(30.0f)) * aspact);
+	cameraSpaceMouseDir.y = (1.0f - 2.0f * mousePos.y / SCREEN_HEIGHT) * glm::tan(glm::radians(30.0f));
+	cameraSpaceMouseDir.z = -1.0f;
+
+	cout << "Camera Space Mouse Dir: " << cameraSpaceMouseDir.x << ", " << cameraSpaceMouseDir.y << ", " << cameraSpaceMouseDir.z << endl;
+
+	Matrix4 viewMatrix{ camera->getViewMatrix() };
+	Matrix4 invViewMatrix{ glm::inverse(viewMatrix) };
+
+	Vector3 worldSpaceMouseDir{ invViewMatrix * Vector4(cameraSpaceMouseDir, 0.0f) };
+
+	cout << "World Space Mouse Dir: " << worldSpaceMouseDir.x << ", " << worldSpaceMouseDir.y << ", " << worldSpaceMouseDir.z << endl;
+
+	Vector3 cameraPos{ camera->getPos() };
+	Vector3 worldSpaceMousePos{ cameraPos + worldSpaceMouseDir * (-cameraPos.z / worldSpaceMouseDir.z) };
+	return worldSpaceMousePos;
 }
 
 void Scene_Start::update()
 {	
 	Scene::update();
-	
+
 }
 
 void Scene_Start::drawBG() const
@@ -105,7 +135,7 @@ void Scene_Start::drawBG() const
 void Scene_Start::enter()
 {
 	// 카메라
-	camera = new Camera(Vector3(0.0f, 100.0f, 200.0f), Vector3(0.0f, 100.0f, -300.0f));
+	camera = new Camera(Vector3(0.0f, 100.0f, 300.0f), Vector3(0.0f, 100.0f, -300.0f));
 	createObject(camera, OBJECT_GROUP::CAMERA);
 
 	// 스트라이크 존

@@ -11,8 +11,6 @@ MousePointer::MousePointer(Vector2 _pos)
 	: transparency{ 1.0f }
 {
 	setPos(_pos);
-
-	cout << _pos.x << ", " << _pos.y << endl;
 }
 
 void MousePointer::update()

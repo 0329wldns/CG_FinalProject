@@ -63,13 +63,9 @@ void Camera::update()
 		oldAt = at;
 	}
 
-	glm::mat4 view{
-		glm::lookAt(myPos
-		, presentAt
-		, glm::vec3(0.0f, 1.0f, 0.0f))
-	};
+	viewMatrix = glm::lookAt(myPos, presentAt, glm::vec3(0.0f, 1.0f, 0.0f));
 	ShaderManager::getInstance().useProgram("default");
-	ShaderManager::getInstance().setMat4("default", "view", view);
+	ShaderManager::getInstance().setMat4("default", "view", viewMatrix);
 }
 
 void Camera::render() const
