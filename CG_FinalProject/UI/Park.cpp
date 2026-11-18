@@ -95,6 +95,7 @@ void Park::render() const
 		foulLineModel = glm::rotate(foulLineModel, glm::radians(-45.0f * side), Vector3{ 0.0f, 1.0f, 0.0f });
 		foulLineModel = glm::scale(foulLineModel, Vector3{ 2.0f, 1.0f, glm::distance(start, foulLineEnd) });
 
+		shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
 		shader.setMat4("default", "model", foulLineModel);
 		MeshManager::getInstance().drawMesh("cube");
 
@@ -104,11 +105,13 @@ void Park::render() const
 
 		Matrix4 poleModel{ 1.0f };
 		poleModel = glm::translate(poleModel, polePosition);
-		poleModel = glm::scale(poleModel, Vector3{ 30.0f, 800.0f, 30.0f });
+		poleModel = glm::scale(poleModel, Vector3{ 30.0f, 1200.0f, 30.0f });
 
 		shader.setMat4("default", "model", poleModel);
+		shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 0.0f });
 		MeshManager::getInstance().drawMesh("cube");
 	}
+	shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
 
 	// 1루와 3루 추가
 	const Vector3 baseScale{ 70.0f, 14.0f, 70.0f };
