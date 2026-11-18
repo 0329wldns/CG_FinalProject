@@ -8,6 +8,7 @@ public:
 	Camera(Vector3 _pos);
 	Camera(Vector3 _pos, Vector3 _at);
 	Camera(Vector3 _pos, Vector3 _at, Vector3 _up);
+	Camera(Vector3 _pos, Vector3 _at, Vector3 _up, bool _isOrthographic = false);
 	~Camera() = default;
 
 	void update() override;
@@ -32,6 +33,8 @@ private:
 	Vector3 up{ 0.0f, 1.0f, 0.0f };
 
 	Matrix4 viewMatrix{ 1.0f };
+
+	bool isOrthographic{ false };	// 직교 투영 여부
 
 	float t{ 0.0f };	// 카메라 이동 애니메이션 용 매게변수
 

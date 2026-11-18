@@ -155,7 +155,7 @@ void Scene_Start::enter()
 	Park* park = new Park();
 	createObject(park, OBJECT_GROUP::DEFAULT);
 
-	Camera* topViewCamera = new Camera(Vector3(0.0f, 5000.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
+	Camera* topViewCamera = new Camera(Vector3(0.0f, 5000.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), true);
 	Camera* sideViewCamera = new Camera(Vector3(500.0f, 150.0f, 150.0f), Vector3(0.0f, 100.0f, -300.0f));
 	Camera* batterViewCamera = new Camera(Vector3(0.0f, 100.0f, 300.0f), Vector3(0.0f, 100.0f, 0.0f));
 	Camera* pitcherViewCamera = new Camera(Vector3(0.0f, 150.0f, -1900.0f), Vector3(0.0f, 150.0f, 0.0f));
