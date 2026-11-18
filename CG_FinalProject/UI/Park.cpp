@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "UI/Park.h"
+#include "Constants.h"
 #include "Managers/MeshManager.h"
 #include "Managers/ShaderManager.h"
 
@@ -13,7 +14,7 @@ void Park::render() const
 	//잔디 평면 추가 
 	Matrix4 model{ 1.0f };
 	model = glm::translate(model, Vector3{ 0.0f, 0.0f, 0.0f });
-	model = glm::scale(model, Vector3{ 10000.0f, 1.0f, 12000.0f });
+	model = glm::scale(model, Vector3{ 16000.0f, 1.0f, 15000.0f });
 
 	auto& shader = ShaderManager::getInstance();
 	shader.setMat4("default", "model", model);
@@ -30,14 +31,14 @@ void Park::render() const
 	MeshManager::getInstance().drawMesh("home_dirt");
 
 	// 투수 마운드의 흙 영역, 투수 마운드는 기본적으로 경사져있음
-	Matrix4 moundModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.6f, -1800.0f });
+	Matrix4 moundModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.6f, WDSCALE::MOUND_Z });
 
 	shader.setMat4("default", "model", moundModel);
 	shader.setVec3("default", "color", Vector3{ 0.55f, 0.32f, 0.17f });
 	MeshManager::getInstance().drawMesh("pitcher_mound");
 
 	// 투수판 밑면을 마운드 윗면에 맞춘다.
-	Matrix4 moundBaseModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 27.5f, -1800.0f });
+	Matrix4 moundBaseModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 27.5f, WDSCALE::MOUND_Z });
 	moundBaseModel = glm::scale(moundBaseModel, Vector3{ 61.0f, 4.0f, 15.2f });
 
 	shader.setMat4("default", "model", moundBaseModel);
@@ -78,20 +79,34 @@ void Park::render() const
 
 	//파울라인 추가
 	const Vector3 start{ 102.0f, 1.0f, -102.0f };
-	const Vector3 end{ 1939.7f, 1.0f, -1939.7f };
+	const float baseAxisOffset = 1939.7f * WDSCALE::DISTANCE_SCALE;
+	const float poleAxisOffset = 7000.0f * WDSCALE::DISTANCE_SCALE;
+	const Vector3 baseEnd{ baseAxisOffset, 1.0f, -baseAxisOffset };
+	const Vector3 foulLineEnd{ poleAxisOffset, 1.0f, -poleAxisOffset };
 
 	for (const float side : { 1.0f, -1.0f }) // 오른쪽과 왼쪽 파울라인을 그리기 위해 side를 1.0f와 -1.0f로 설정
 	{
-		Vector3 center = (start + end) * 0.5f; //파울라인으로 사용할 큐브의 중심을 선의 시작점과 끝점 사이
+		Vector3 center = (start + foulLineEnd) * 0.5f; // 파울라인 큐브의 중심은 시작점과 끝점의 중간
 		center.x *= side; // side가 -1.0f이면 x좌표를 반전시켜 왼쪽 파울라인을 그리도록 함
 
 		Matrix4 foulLineModel{ 1.0f }; // 각 선의 변환은 단위 행렬 초기화
 		foulLineModel = glm::translate(foulLineModel, center);
 		// 파울라인을 회전시키기 위해 -45도 * side만큼 회전, side가 -1.0f이면 왼쪽 파울라인이므로 반대 방향으로 회전
 		foulLineModel = glm::rotate(foulLineModel, glm::radians(-45.0f * side), Vector3{ 0.0f, 1.0f, 0.0f });
-		foulLineModel = glm::scale(foulLineModel, Vector3{ 2.0f, 1.0f, glm::distance(start, end) });
+		foulLineModel = glm::scale(foulLineModel, Vector3{ 2.0f, 1.0f, glm::distance(start, foulLineEnd) });
 
 		shader.setMat4("default", "model", foulLineModel);
+		MeshManager::getInstance().drawMesh("cube");
+
+		Vector3 polePosition = foulLineEnd;
+		polePosition.x *= side;  // 1루·3루 방향에 맞춰 X 좌표를 반전
+		polePosition.y = 400.5f; // 높이 800인 폴의 밑면을 잔디(y = 0.5)에 맞춤
+
+		Matrix4 poleModel{ 1.0f };
+		poleModel = glm::translate(poleModel, polePosition);
+		poleModel = glm::scale(poleModel, Vector3{ 30.0f, 800.0f, 30.0f });
+
+		shader.setMat4("default", "model", poleModel);
 		MeshManager::getInstance().drawMesh("cube");
 	}
 
@@ -101,7 +116,7 @@ void Park::render() const
 	for (const float side : { 1.0f, -1.0f })
 	{
 		Matrix4 baseModel{ 1.0f };
-		baseModel = glm::translate(baseModel, Vector3{ side * end.x, 7.5f, end.z - cornerOffset });
+		baseModel = glm::translate(baseModel, Vector3{ side * baseEnd.x, 7.5f, baseEnd.z - cornerOffset });
 		baseModel = glm::rotate(baseModel, glm::radians(45.0f), Vector3{ 0.0f, 1.0f, 0.0f });
 		baseModel = glm::scale(baseModel, baseScale);
 
@@ -112,7 +127,7 @@ void Park::render() const
 	// 2루 추가
 
 	// 2루 베이스
-	const Vector3 secondBasePos{ 0.0f, 7.5f, end.z * 2.0f };
+	const Vector3 secondBasePos{ 0.0f, 7.5f, baseEnd.z * 2.0f };
 	const Vector3 up{ 0.0f, 1.0f, 0.0f };
 	auto& meshes = MeshManager::getInstance();
 
@@ -128,7 +143,7 @@ void Park::render() const
 
 	for (const float side : { 1.0f, -1.0f })
 	{
-		const Vector3 from{ side * end.x, 4.5f, end.z - cornerOffset };
+		const Vector3 from{ side * baseEnd.x, 4.5f, baseEnd.z - cornerOffset };
 		const Vector3 direction = to - from;
 
 		Matrix4 lineModel = glm::translate(Matrix4{ 1.0f }, (from + to) * 0.5f);

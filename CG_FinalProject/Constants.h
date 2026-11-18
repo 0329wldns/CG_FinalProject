@@ -59,6 +59,12 @@ enum class UI_GROUP
 	END			// 그룹 개수 파악용
 };
 
+namespace WDSCALE
+{
+	inline constexpr float DISTANCE_SCALE = 0.5f;
+	inline constexpr float MOUND_Z = -1800.0f * DISTANCE_SCALE;
+}
+
 namespace STRIKE_ZONE
 {
 	static const float WIDTH{ 43.0f };

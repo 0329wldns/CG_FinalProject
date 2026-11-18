@@ -13,7 +13,7 @@ Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	, destination(_destination)
 	, pitchType(_pitchType)
 {
-	startPos = Vector3(-30.0f, 170.0f, -1800.0f);
+	startPos = Vector3(-30.0f, 170.0f, WDSCALE::MOUND_Z);
 
 	setPos(startPos);
 	setScale(Vector3{ 3.5f, 3.5f, 3.5f });
