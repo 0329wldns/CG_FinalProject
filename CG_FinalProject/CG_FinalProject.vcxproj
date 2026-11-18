@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Componants\Collider.h" />
+    <ClInclude Include="Managers\CameraManager.h" />
     <ClInclude Include="Managers\CollisionManager.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="EventFunc.h" />

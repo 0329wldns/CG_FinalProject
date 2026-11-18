@@ -31,9 +31,14 @@ public:
 	// 씬 탈출 시 리소스 정리
 	void exit() override;
 
+	// 공 궤적 표시 여부 반환
 	bool isShowTrajectory() const { return showTrajectory; }
 
+	void addCamera(const string& name, Camera* camera);
+	void setCamera(const string& name);
+
 private:
+	map<string, Camera*> cameras;
 	Camera* camera;
 	Ball* ball;
 

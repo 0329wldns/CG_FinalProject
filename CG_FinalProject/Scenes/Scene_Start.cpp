@@ -16,14 +16,14 @@ void Scene_Start::processKeyInput()
 	if (keyManager.getKeyState(KEY::NUM1) == KEY_STATE::TAP)
 	{
 		Vector3 destination{ STRIKE_ZONE::CENTER };
-		ball = new Ball(10.0f, destination, PITCH_TYPE::STRAIGHT);
+		Ball* ball = new Ball(10.0f, destination, PITCH_TYPE::STRAIGHT);
 		createObject(ball, OBJECT_GROUP::BALL);
 	}
 	// 커브볼 던지기
 	if (keyManager.getKeyState(KEY::NUM2) == KEY_STATE::TAP)
 	{
 		Vector3 destination{ STRIKE_ZONE::CENTER };
-		ball = new Ball(120.0f, destination, PITCH_TYPE::CURVE);
+		Ball* ball = new Ball(120.0f, destination, PITCH_TYPE::CURVE);
 		createObject(ball, OBJECT_GROUP::BALL);
 	}
 	// 종료
@@ -67,14 +67,24 @@ void Scene_Start::processKeyInput()
 		camera->toggleTopView();
 	}
 
+	if (keyManager.getKeyState(KEY::F9) == KEY_STATE::TAP)
+	{
+		setCamera("top");
+	}
+
+	if (keyManager.getKeyState(KEY::F10) == KEY_STATE::TAP)
+	{
+		setCamera("side");
+	}
+
 	if (keyManager.getKeyState(KEY::F11) == KEY_STATE::TAP)
 	{
-		camera->setPos(Vector3(0.0f, 100.0f, 150.0f));
+		setCamera("pitcher");
 	}
 
 	if (keyManager.getKeyState(KEY::F12) == KEY_STATE::TAP)
 	{
-		camera->setPos(Vector3(500.0f, 150.0f, 150.0f));
+		setCamera("batter");
 	}
 
 	// 마우스
@@ -144,11 +154,43 @@ void Scene_Start::enter()
 
 	Park* park = new Park();
 	createObject(park, OBJECT_GROUP::DEFAULT);
+
+	Camera* topViewCamera = new Camera(Vector3(0.0f, 5000.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
+	Camera* sideViewCamera = new Camera(Vector3(500.0f, 150.0f, 150.0f), Vector3(0.0f, 100.0f, -300.0f));
+	Camera* batterViewCamera = new Camera(Vector3(0.0f, 100.0f, 300.0f), Vector3(0.0f, 100.0f, 0.0f));
+	Camera* pitcherViewCamera = new Camera(Vector3(0.0f, 150.0f, 1900.0f), Vector3(0.0f, 150.0f, 0.0f));
+
+	addCamera("top", topViewCamera);
+	addCamera("side", sideViewCamera);
+	addCamera("batter", batterViewCamera);
+	addCamera("pitcher", pitcherViewCamera);
+
+	setCamera("batter");
 }
 
 void Scene_Start::exit()
 {
 	reset();
-	camera = nullptr;
-	ball = nullptr;
+
+	cameras.clear();
+}
+
+void Scene_Start::addCamera(const string& name, Camera* camera)
+{
+	auto iter = cameras.find(name);
+
+	if (cameras.end() == iter)
+	{
+		cameras.insert(make_pair(name, camera));
+		createObject(camera, OBJECT_GROUP::CAMERA);
+	}
+}
+
+void Scene_Start::setCamera(const string& name)
+{
+	auto iter = cameras.find(name);
+	if (cameras.end() != iter)
+	{
+		iter->second->useCamera();
+	}
 }
