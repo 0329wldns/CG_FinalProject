@@ -75,6 +75,9 @@
     <ClCompile Include="Managers\MeshManager.cpp">
       <Filter>소스 파일\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Managers\TextureManager.cpp">
+      <Filter>소스 파일\Managers</Filter>
+    </ClCompile>
     <ClCompile Include="Managers\SceneManager.cpp">
       <Filter>소스 파일\Managers</Filter>
     </ClCompile>
@@ -135,6 +138,9 @@
       <Filter>헤더 파일\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Managers\MeshManager.h">
+      <Filter>헤더 파일\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\TextureManager.h">
       <Filter>헤더 파일\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Managers\KeyManager.h">

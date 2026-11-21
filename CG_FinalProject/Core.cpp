@@ -9,6 +9,7 @@
 #include "Managers/TimeManager.h"
 #include "Managers/ShaderManager.h"
 #include "Managers/MeshManager.h"
+#include "Managers/TextureManager.h"
 
 Core::~Core()
 {
@@ -59,6 +60,11 @@ int Core::init()
 	SceneManager::getInstance().init();
 	ShaderManager::getInstance().init();
 	MeshManager::getInstance().init();
+	if (!TextureManager::getInstance().init())
+	{
+		cerr << "Texture manager initialization failed!\n";
+		return -1;
+	}
 
 	// 배경색 설정
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
