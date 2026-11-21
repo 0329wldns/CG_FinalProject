@@ -3,6 +3,7 @@
 #include "Constants.h"
 #include "Managers/MeshManager.h"
 #include "Managers/ShaderManager.h"
+#include "Managers/TextureManager.h"
 
 Park::Park()
 {
@@ -149,6 +150,21 @@ void Park::render() const
 
 		shader.setMat4("default", "model", fenceModel);
 		MeshManager::getInstance().drawMesh("cube");
+	}
+
+	// 중앙 펜스의 홈 방향 면 앞에 광고판을 배치한다.
+	if (TextureManager::getInstance().bindTexture("fence_ad"))
+	{
+		Matrix4 adModel{ 1.0f };
+		adModel = glm::translate(
+			adModel, Vector3{ 0.0f, 100.5f, centerFieldZ + 30.0f });
+		adModel = glm::scale(adModel, Vector3{ 540.0f, 180.0f, 1.0f });
+
+		shader.setMat4("default", "model", adModel);
+		shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
+		shader.setBool("default", "useTexture", true);
+		MeshManager::getInstance().drawMesh("fence_ad_panel");
+		shader.setBool("default", "useTexture", false);
 	}
 
 	// 뒤에서 그리는 베이스와 선의 색상 복구

@@ -123,6 +123,38 @@ void MeshManager::init()
 	loadOBJ("home_plate", "res/home_plate.obj", glm::vec3(1.0f, 1.0f, 1.0f));
 	loadOBJ("home_dirt", "res/home_dirt.obj", glm::vec3(1.0f, 1.0f, 1.0f));
 	loadOBJ("pitcher_mound", "res/pitcher_mound.obj", glm::vec3(1.0f, 1.0f, 1.0f));
+
+	// 광고판 정점은 위치 3개, 색상 3개, UV 2개로 구성한다.
+	const float adVertices[]
+	{
+		-0.5f, -0.5f, 0,  1, 1, 1,  0, 0,
+		 0.5f, -0.5f, 0,  1, 1, 1,  1, 0,
+		 0.5f,  0.5f, 0,  1, 1, 1,  1, 1,
+		-0.5f, -0.5f, 0,  1, 1, 1,  0, 0,
+		 0.5f,  0.5f, 0,  1, 1, 1,  1, 1,
+		-0.5f,  0.5f, 0,  1, 1, 1,  0, 1
+	};
+
+	MeshData adMesh{};
+	adMesh.vertexCount = 6;
+	glGenVertexArrays(1, &adMesh.VAO);
+	glGenBuffers(1, &adMesh.VBO);
+	glBindVertexArray(adMesh.VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, adMesh.VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(adVertices), adVertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), nullptr);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
+		reinterpret_cast<const void*>(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
+		reinterpret_cast<const void*>(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	meshMap.emplace("fence_ad_panel", adMesh);
 }
 
 bool MeshManager::loadOBJ(const std::string& name, const std::string& filePath, const glm::vec3& defaultColor)
