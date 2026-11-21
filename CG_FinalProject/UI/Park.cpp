@@ -113,6 +113,47 @@ void Park::render() const
 	}
 	shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
 
+	// 외야 펜스
+	const int fenceSegments = 32;
+	const float centerFieldZ = -5000.0f;// 외야 펜스의 중앙 Z 좌표, 펜스는 중앙에서 양쪽으로 곡선 형태로 그려짐
+
+	// t가 -1이면 왼쪽 폴, 0이면 중앙 펜스, +1이면 오른쪽 폴
+	auto fencePoint = [&](float t)
+		{
+			return Vector3{
+				foulLineEnd.x * t,
+				100.5f,
+				centerFieldZ + (foulLineEnd.z - centerFieldZ) * t * t
+			};
+		};
+
+	shader.setVec3("default", "color", Vector3{ 0.05f, 0.25f, 0.15f });
+
+	for (int i = 0; i < fenceSegments; ++i) // 펜스의 각 세그먼트를 그리기 위해 fenceSegments만큼 반복
+	{
+		const float t = -1.0f + 2.0f * i / fenceSegments;
+		const float nextT = -1.0f + 2.0f * (i + 1) / fenceSegments;
+
+		const Vector3 from = fencePoint(t);
+		const Vector3 to = fencePoint(nextT);
+		const Vector3 direction = to - from;
+
+		Matrix4 fenceModel{ 1.0f };
+		fenceModel = glm::translate(fenceModel, (from + to) * 0.5f);
+		fenceModel = glm::rotate(
+			fenceModel, glm::atan(direction.x, direction.z),
+			Vector3{ 0.0f, 1.0f, 0.0f });
+		fenceModel = glm::scale(
+			fenceModel,
+			Vector3{ 20.0f, 200.0f, glm::length(direction) + 2.0f });
+
+		shader.setMat4("default", "model", fenceModel);
+		MeshManager::getInstance().drawMesh("cube");
+	}
+
+	// 뒤에서 그리는 베이스와 선의 색상 복구
+	shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
+
 	// 1루와 3루 추가
 	const Vector3 baseScale{ 70.0f, 14.0f, 70.0f };
 	const float cornerOffset = baseScale.x / glm::sqrt(2.0f);
