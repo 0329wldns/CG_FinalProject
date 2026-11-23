@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "UI/Park.h"
 #include "Constants.h"
 #include "Managers/MeshManager.h"
@@ -15,7 +15,7 @@ void Park::render() const
 	//잔디 평면 추가 
 	Matrix4 model{ 1.0f };
 	model = glm::translate(model, Vector3{ 0.0f, 0.0f, 0.0f });
-	model = glm::scale(model, Vector3{ 16000.0f, 1.0f, 15000.0f });
+	model = glm::scale(model, Vector3{ 160.0f, 0.01f, 150.0f });
 
 	auto& shader = ShaderManager::getInstance();
 	shader.setMat4("default", "model", model);
@@ -25,29 +25,30 @@ void Park::render() const
 	MeshManager::getInstance().drawMesh("cube");
 
 	// 홈플레이트와 양쪽 타자석을 감싸는 흙 바닥
-	Matrix4 dirtModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.6f, -40.0f });
-	dirtModel = glm::scale(dirtModel, Vector3{ 150.0f, 1.0f, 150.0f });
+	Matrix4 dirtModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.006f, -0.4f });
+	dirtModel = glm::scale(dirtModel, Vector3{ 1.5f, 1.0f, 1.5f });
 	shader.setMat4("default", "model", dirtModel);
 	shader.setVec3("default", "color", Vector3{ 0.55f, 0.32f, 0.17f });
 	MeshManager::getInstance().drawMesh("home_dirt");
 
 	// 투수 마운드의 흙 영역, 투수 마운드는 기본적으로 경사져있음
-	Matrix4 moundModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.6f, WDSCALE::MOUND_Z });
+	Matrix4 moundModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.006f, MOUND_Z });
+	moundModel = glm::scale(moundModel, Vector3{ 0.01f, 0.01f, 0.01f });
 
 	shader.setMat4("default", "model", moundModel);
 	shader.setVec3("default", "color", Vector3{ 0.55f, 0.32f, 0.17f });
 	MeshManager::getInstance().drawMesh("pitcher_mound");
 
 	// 투수판 밑면을 마운드 윗면에 맞춘다.
-	Matrix4 moundBaseModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 27.5f, WDSCALE::MOUND_Z });
-	moundBaseModel = glm::scale(moundBaseModel, Vector3{ 61.0f, 4.0f, 15.2f });
+	Matrix4 moundBaseModel = glm::translate(Matrix4{ 1.0f }, Vector3{ 0.0f, 0.255f, MOUND_Z });
+	moundBaseModel = glm::scale(moundBaseModel, Vector3{ 0.61f, 0.04f, 0.152f });
 
 	shader.setMat4("default", "model", moundBaseModel);
 	shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
 	MeshManager::getInstance().drawMesh("cube");
 
 	//홈플레이트 추가
-	Matrix4 homePlateModel{ 1.0f };
+	Matrix4 homePlateModel = glm::scale(Matrix4{ 1.0f }, Vector3{ 0.01f, 0.01f, 0.01f });
 
 	shader.setMat4("default", "model", homePlateModel);
 	shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
@@ -70,20 +71,20 @@ void Park::render() const
 	for (const float side : { 1.0f, -1.0f })
 	{
 		// 세로선 두 개
-		drawBatterBoxLine({ side * 37.0f, 1.0f, -40.0f }, { 2.0f, 1.0f, 120.0f });
-		drawBatterBoxLine({ side * 117.0f, 1.0f, -40.0f }, { 2.0f, 1.0f, 120.0f });
+		drawBatterBoxLine({ side * 0.37f, 0.01f, -0.4f }, { 0.02f, 0.01f, 1.2f });
+		drawBatterBoxLine({ side * 1.17f, 0.01f, -0.4f }, { 0.02f, 0.01f, 1.2f });
 
 		// 가로선 두 개
-		drawBatterBoxLine({ side * 77.0f, 1.0f, -100.0f }, { 80.0f, 1.0f, 2.0f });
-		drawBatterBoxLine({ side * 77.0f, 1.0f,   20.0f }, { 80.0f, 1.0f, 2.0f });
+		drawBatterBoxLine({ side * 0.77f, 0.01f, -1.0f }, { 0.8f, 0.01f, 0.02f });
+		drawBatterBoxLine({ side * 0.77f, 0.01f,   0.2f }, { 0.8f, 0.01f, 0.02f });
 	}
 
 	//파울라인 추가
-	const Vector3 start{ 102.0f, 1.0f, -102.0f };
-	const float baseAxisOffset = 1939.7f * WDSCALE::DISTANCE_SCALE;
-	const float poleAxisOffset = 7000.0f * WDSCALE::DISTANCE_SCALE;
-	const Vector3 baseEnd{ baseAxisOffset, 1.0f, -baseAxisOffset };
-	const Vector3 foulLineEnd{ poleAxisOffset, 1.0f, -poleAxisOffset };
+	const Vector3 start{ 1.02f, 0.01f, -1.02f };
+	const float baseAxisOffset = 19.397f;
+	const float poleAxisOffset = 70.0f;
+	const Vector3 baseEnd{ baseAxisOffset, 0.01f, -baseAxisOffset };
+	const Vector3 foulLineEnd{ poleAxisOffset, 0.01f, -poleAxisOffset };
 
 	for (const float side : { 1.0f, -1.0f }) // 오른쪽과 왼쪽 파울라인을 그리기 위해 side를 1.0f와 -1.0f로 설정
 	{
@@ -94,7 +95,7 @@ void Park::render() const
 		foulLineModel = glm::translate(foulLineModel, center);
 		// 파울라인을 회전시키기 위해 -45도 * side만큼 회전, side가 -1.0f이면 왼쪽 파울라인이므로 반대 방향으로 회전
 		foulLineModel = glm::rotate(foulLineModel, glm::radians(-45.0f * side), Vector3{ 0.0f, 1.0f, 0.0f });
-		foulLineModel = glm::scale(foulLineModel, Vector3{ 2.0f, 1.0f, glm::distance(start, foulLineEnd) });
+		foulLineModel = glm::scale(foulLineModel, Vector3{ 0.05f, 0.01f, glm::distance(start, foulLineEnd) });
 
 		shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
 		shader.setMat4("default", "model", foulLineModel);
@@ -102,11 +103,11 @@ void Park::render() const
 
 		Vector3 polePosition = foulLineEnd;
 		polePosition.x *= side;  // 1루·3루 방향에 맞춰 X 좌표를 반전
-		polePosition.y = 400.5f; // 높이 800인 폴의 밑면을 잔디(y = 0.5)에 맞춤
+		polePosition.y = 6.0f;
 
 		Matrix4 poleModel{ 1.0f };
 		poleModel = glm::translate(poleModel, polePosition);
-		poleModel = glm::scale(poleModel, Vector3{ 30.0f, 1200.0f, 30.0f });
+		poleModel = glm::scale(poleModel, Vector3{ 0.3f, 12.0f, 0.3f });
 
 		shader.setMat4("default", "model", poleModel);
 		shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 0.0f });
@@ -116,14 +117,14 @@ void Park::render() const
 
 	// 외야 펜스
 	const int fenceSegments = 32;
-	const float centerFieldZ = -5000.0f;// 외야 펜스의 중앙 Z 좌표, 펜스는 중앙에서 양쪽으로 곡선 형태로 그려짐
+	const float centerFieldZ = -50.0f;// 외야 펜스의 중앙 Z 좌표, 펜스는 중앙에서 양쪽으로 곡선 형태로 그려짐
 
 	// t가 -1이면 왼쪽 폴, 0이면 중앙 펜스, +1이면 오른쪽 폴
 	auto fencePoint = [&](float t)
 		{
 			return Vector3{
 				foulLineEnd.x * t,
-				100.5f,
+				1.0f,
 				centerFieldZ + (foulLineEnd.z - centerFieldZ) * t * t
 			};
 		};
@@ -146,7 +147,7 @@ void Park::render() const
 			Vector3{ 0.0f, 1.0f, 0.0f });
 		fenceModel = glm::scale(
 			fenceModel,
-			Vector3{ 20.0f, 200.0f, glm::length(direction) + 2.0f });
+			Vector3{ 0.2f, 2.0f, glm::length(direction) + 0.02f });
 
 		shader.setMat4("default", "model", fenceModel);
 		MeshManager::getInstance().drawMesh("cube");
@@ -157,8 +158,8 @@ void Park::render() const
 	{
 		Matrix4 adModel{ 1.0f };
 		adModel = glm::translate(
-			adModel, Vector3{ 0.0f, 100.5f, centerFieldZ + 30.0f });
-		adModel = glm::scale(adModel, Vector3{ 540.0f, 180.0f, 1.0f });
+			adModel, Vector3{ 0.0f, 1.0f, centerFieldZ + 0.3f });
+		adModel = glm::scale(adModel, Vector3{ 5.4f, 1.8f, 0.01f });
 
 		shader.setMat4("default", "model", adModel);
 		shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
@@ -171,12 +172,12 @@ void Park::render() const
 	shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
 
 	// 1루와 3루 추가
-	const Vector3 baseScale{ 70.0f, 14.0f, 70.0f };
+	const Vector3 baseScale{ 0.7f, 0.14f, 0.7f };
 	const float cornerOffset = baseScale.x / glm::sqrt(2.0f);
 	for (const float side : { 1.0f, -1.0f })
 	{
 		Matrix4 baseModel{ 1.0f };
-		baseModel = glm::translate(baseModel, Vector3{ side * baseEnd.x, 7.5f, baseEnd.z - cornerOffset });
+		baseModel = glm::translate(baseModel, Vector3{ side * baseEnd.x, 0.075f, baseEnd.z - cornerOffset });
 		baseModel = glm::rotate(baseModel, glm::radians(45.0f), Vector3{ 0.0f, 1.0f, 0.0f });
 		baseModel = glm::scale(baseModel, baseScale);
 
@@ -187,28 +188,28 @@ void Park::render() const
 	// 2루 추가
 
 	// 2루 베이스
-	const Vector3 secondBasePos{ 0.0f, 7.5f, baseEnd.z * 2.0f };
+	const Vector3 secondBasePos{ 0.0f, 0.075f, baseEnd.z * 2.0f };
 	const Vector3 up{ 0.0f, 1.0f, 0.0f };
 	auto& meshes = MeshManager::getInstance();
 
 	Matrix4 secondBaseModel = glm::translate(Matrix4{ 1.0f }, secondBasePos);
 	secondBaseModel = glm::rotate(secondBaseModel, glm::radians(45.0f), up);
-	secondBaseModel = glm::scale(secondBaseModel, Vector3{ 70.0f, 14.0f, 70.0f });
+	secondBaseModel = glm::scale(secondBaseModel, Vector3{ 0.7f, 0.14f, 0.7f });
 
 	shader.setMat4("default", "model", secondBaseModel);
 	meshes.drawMesh("cube");
 
 	// 1루와 3루에서 각각 2루로 이어지는 확인용 선
-	const Vector3 to{ secondBasePos.x, 4.5f, secondBasePos.z };
+	const Vector3 to{ secondBasePos.x, 0.045f, secondBasePos.z };
 
 	for (const float side : { 1.0f, -1.0f })
 	{
-		const Vector3 from{ side * baseEnd.x, 4.5f, baseEnd.z - cornerOffset };
+		const Vector3 from{ side * baseEnd.x, 0.045f, baseEnd.z - cornerOffset };
 		const Vector3 direction = to - from;
 
 		Matrix4 lineModel = glm::translate(Matrix4{ 1.0f }, (from + to) * 0.5f);
 		lineModel = glm::rotate(lineModel, glm::atan(direction.x, direction.z), up);
-		lineModel = glm::scale(lineModel, Vector3{ 16.0f, 8.0f, glm::length(direction) });
+		lineModel = glm::scale(lineModel, Vector3{ 0.16f, 0.08f, glm::length(direction) });
 
 		shader.setMat4("default", "model", lineModel);
 		meshes.drawMesh("cube");

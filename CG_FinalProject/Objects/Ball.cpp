@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Objects/Ball.h"
 #include "Managers/MeshManager.h"
 #include "Managers/ShaderManager.h"
@@ -13,10 +13,10 @@ Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	, destination(_destination)
 	, pitchType(_pitchType)
 {
-	startPos = Vector3(-30.0f, 170.0f, WDSCALE::MOUND_Z);
+	startPos = Vector3(-0.3f, 1.7f, MOUND_Z);
 
 	setPos(startPos);
-	setScale(Vector3{ 3.5f, 3.5f, 3.5f });
+	setScale(Vector3{ 0.0365f, 0.0365f, 0.0365f });
 
 	switch (pitchType)
 	{
@@ -72,7 +72,7 @@ Ball::Ball(float _speed, Vector3 _destination)
 	, startPos( Vector3{ 0.0f, 0.0f, 0.0f } )
 {
 	setPos(startPos);
-	setScale(Vector3{ 7.0f, 7.0f, 7.0f });
+	setScale(Vector3{ 0.07f, 0.07f, 0.07f });
 
 	// 공 궤적 정점 버퍼 세팅
 	std::vector<std::array<float, 3>> trajectoryVertices;
@@ -103,7 +103,7 @@ Ball::Ball(float _speed, Vector3 _destination)
 
 Ball::~Ball()
 {
-	cout << "날아간 거리: " << glm::distance(Vector2(startPos.x, startPos.z), Vector2(destination.x, destination.z)) / 100.0f << "m" << endl;
+	cout << "날아간 거리: " << glm::distance(Vector2(startPos.x, startPos.z), Vector2(destination.x, destination.z)) << "m" << endl;
 	cout << "걸린시간: " << accTime << "초" << endl;
 	cout << "Ball deleted" << endl;
 }
@@ -127,8 +127,7 @@ void Ball::update()
 			+ t * t * destination;
 	}
 
-	// 18m를 1초 만에 가면 64.8km/h
-	t += dt * speed / 64.8f;
+	t += dt * speed / 66.384f;
 
 	if (t > 1.0f)
 	{
@@ -170,7 +169,7 @@ void Ball::render() const
 	// 공 그림자 렌더링
 	Matrix4 shadowModel{ 1.0f };
 
-	shadowModel = glm::translate(shadowModel, Vector3{ getPos().x, 1.0f, getPos().z });
+	shadowModel = glm::translate(shadowModel, Vector3{ getPos().x, 0.01f, getPos().z });
 	shadowModel = glm::rotate(shadowModel, glm::radians(-90.0f), Vector3{ 1.0f, 0.0f, 0.0f });
 	shadowModel = glm::scale(shadowModel, getScale());
 

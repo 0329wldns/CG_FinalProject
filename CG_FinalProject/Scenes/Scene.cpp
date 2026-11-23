@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Scenes/Scene.h"
 #include "Managers/KeyManager.h"
 #include "Managers/MeshManager.h"
@@ -136,7 +136,7 @@ void Scene::drawGrid(bool xz, bool yz, bool xy) const
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_GRAY);
 	ShaderManager::getInstance().setFloat("default", "transparency", 0.5f);
 
-	const float gridSpacing{ 100.0f };
+	const float gridSpacing{ 1.0f };
 
 	// XY 평면
 	if (xy)

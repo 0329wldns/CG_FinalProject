@@ -13,7 +13,7 @@ static uniform_real_distribution<float> realDist(0.0f, 1.0f);
 // 윈도우 해상도 및 카메라 최대 가시 범위
 static const int SCREEN_WIDTH = 1920;
 static const int SCREEN_HEIGHT = 1080;
-static const float VISIBLE_RANGE = 10000.0f;
+static const float VISIBLE_RANGE = 300.0f;
 
 // 자주 사용하는 기본 색상 벡터 정의 (RGB 0.0f ~ 1.0f)
 static const Color COLOR_RED{ 1.0f, 0.0f, 0.0f };
@@ -59,16 +59,12 @@ enum class UI_GROUP
 	END			// 그룹 개수 파악용
 };
 
-namespace WDSCALE
-{
-	inline constexpr float DISTANCE_SCALE = 0.5f;
-	inline constexpr float MOUND_Z = -1800.0f * DISTANCE_SCALE;
-}
+static const float MOUND_Z = -18.44f;
 
 namespace STRIKE_ZONE
 {
-	static const float WIDTH{ 43.0f };
-	static const float HEIGHT{ 51.7f };
-	static const float DEPTH{ 0.1f };
-	static const Vector3 CENTER{ 0.0f, 74.5f, 0.0f };
+	static const float WIDTH{ 0.43f };
+	static const float HEIGHT{ 0.517f };
+	static const float DEPTH{ 0.01f };
+	static const Vector3 CENTER{ 0.0f, 0.745f, 0.0f };
 }

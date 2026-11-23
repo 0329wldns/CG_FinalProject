@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Scenes/Scene_Start.h"
 #include "Managers/KeyManager.h"
 #include "EventFunc.h"
@@ -145,7 +145,7 @@ void Scene_Start::drawBG() const
 void Scene_Start::enter()
 {
 	// 카메라
-	camera = new Camera(Vector3(0.0f, 100.0f, 300.0f), Vector3(0.0f, 100.0f, -300.0f));
+	camera = new Camera(Vector3(0.0f, 1.0f, 3.0f), Vector3(0.0f, 1.0f, -3.0f));
 	createObject(camera, OBJECT_GROUP::CAMERA);
 
 	// 스트라이크 존
@@ -155,10 +155,10 @@ void Scene_Start::enter()
 	Park* park = new Park();
 	createObject(park, OBJECT_GROUP::DEFAULT);
 
-	Camera* topViewCamera = new Camera(Vector3(0.0f, 5000.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), true);
-	Camera* sideViewCamera = new Camera(Vector3(500.0f, 150.0f, 150.0f), Vector3(0.0f, 100.0f, -300.0f));
-	Camera* batterViewCamera = new Camera(Vector3(0.0f, 100.0f, 300.0f), Vector3(0.0f, 100.0f, 0.0f));
-	Camera* pitcherViewCamera = new Camera(Vector3(0.0f, 150.0f, -1900.0f), Vector3(0.0f, 150.0f, 0.0f));
+	Camera* topViewCamera = new Camera(Vector3(0.0f, 50.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), true);
+	Camera* sideViewCamera = new Camera(Vector3(5.0f, 1.5f, 1.5f), Vector3(0.0f, 1.0f, -3.0f));
+	Camera* batterViewCamera = new Camera(Vector3(0.0f, 1.0f, 3.0f), Vector3(0.0f, 1.0f, 0.0f));
+	Camera* pitcherViewCamera = new Camera(Vector3(0.0f, 1.5f, MOUND_Z), Vector3(0.0f, 1.5f, 0.0f));
 
 	addCamera("top", topViewCamera);
 	addCamera("side", sideViewCamera);

@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Objects/Camera.h"
 #include "Managers/ShaderManager.h"
 #include "Managers/TimeManager.h"
@@ -65,8 +65,7 @@ void Camera::update()
 	{
 		if (isOrthographic)
 		{
-			// 현재 잔디의 깊이 12000에 여백을 더해 위아래로 12600을 표시한다.
-			const float halfHeight = 8000.0f;
+			const float halfHeight = 80.0f;
 			const float halfWidth = halfHeight * aspect;
 
 			const Matrix4 projection = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, 0.1f, VISIBLE_RANGE);
