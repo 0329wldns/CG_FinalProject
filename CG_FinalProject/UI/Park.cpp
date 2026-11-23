@@ -15,7 +15,7 @@ void Park::render() const
 	//잔디 평면 추가 
 	Matrix4 model{ 1.0f };
 	model = glm::translate(model, Vector3{ 0.0f, 0.0f, 0.0f });
-	model = glm::scale(model, Vector3{ 400.0f, 0.01f, 240.0f });
+	model = glm::scale(model, Vector3{ 300.0f, 0.01f, 240.0f });
 
 	auto& shader = ShaderManager::getInstance();
 	shader.setMat4("default", "model", model);
@@ -115,7 +115,9 @@ void Park::render() const
 	}
 	shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
 
-	// 외야 펜스
+	// 외야 펜스와 반복해서 배치할 광고 텍스처
+	const char* adNames[] = { "fence_ad", "power", "burger", "ace", "coffee" }; 
+	auto& textures = TextureManager::getInstance(); // 텍스처 관리자 인스턴스를 가져온다.
 	const int fenceSegments = 32;
 	const float centerFieldZ = -110.0f;// 외야 펜스의 중앙 Z 좌표, 펜스는 중앙에서 양쪽으로 곡선 형태로 그려짐
 
@@ -133,11 +135,11 @@ void Park::render() const
 
 	for (int i = 0; i < fenceSegments; ++i) // 펜스의 각 세그먼트를 그리기 위해 fenceSegments만큼 반복
 	{
-		const float t = -1.0f + 2.0f * i / fenceSegments;
-		const float nextT = -1.0f + 2.0f * (i + 1) / fenceSegments;
+		const float t = -1.0f + 2.0f * i / fenceSegments; // t가 -1이면 왼쪽 폴, 0이면 중앙 펜스, +1이면 오른쪽 폴
+		const float nextT = -1.0f + 2.0f * (i + 1) / fenceSegments; // 다음 세그먼트의 t 값, 펜스는 곡선 형태이므로 각 세그먼트를 직선으로 근사하여 그린다.
 
-		const Vector3 from = fencePoint(t);
-		const Vector3 to = fencePoint(nextT);
+		const Vector3 from = fencePoint(t); // 펜스의 시작점 좌표, t 값에 따라 왼쪽 폴, 중앙 펜스, 오른쪽 폴 중 하나를 선택
+		const Vector3 to = fencePoint(nextT); // 펜스의 끝점 좌표, 다음 세그먼트의 t 값에 따라 왼쪽 폴, 중앙 펜스, 오른쪽 폴 중 하나를 선택
 		const Vector3 direction = to - from;
 
 		Matrix4 fenceModel{ 1.0f };
@@ -151,21 +153,29 @@ void Park::render() const
 
 		shader.setMat4("default", "model", fenceModel);
 		MeshManager::getInstance().drawMesh("cube");
-	}
 
-	// 중앙 펜스의 홈 방향 면 앞에 광고판을 배치한다.
-	if (TextureManager::getInstance().bindTexture("fence_ad"))
-	{
-		Matrix4 adModel{ 1.0f };
-		adModel = glm::translate(
-			adModel, Vector3{ 0.0f, 1.0f, centerFieldZ + 0.3f });
-		adModel = glm::scale(adModel, Vector3{ 5.4f, 1.8f, 0.01f });
+		if (textures.bindTexture(adNames[i % 5])) // 광고 텍스처를 바인딩, 5개의 광고 텍스처를 반복해서 사용
+		{
+			const Vector3 up{ 0.0f, 1.0f, 0.0f }; // 광고 패널의 위쪽 방향 벡터, 펜스의 위쪽 방향과 동일하게 설정
+			const float length = glm::length(direction); // 광고 패널의 길이, 펜스 세그먼트의 길이와 동일하게 설정
+			const Vector3 inward = glm::normalize(glm::cross(direction, up)); // 광고 패널의 안쪽 방향 벡터, 펜스 세그먼트의 방향과 위쪽 방향의 외적을 통해 계산
 
-		shader.setMat4("default", "model", adModel);
-		shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f });
-		shader.setBool("default", "useTexture", true);
-		MeshManager::getInstance().drawMesh("fence_ad_panel");
-		shader.setBool("default", "useTexture", false);
+			// 펜스 안쪽 면에서 조금 띄워 깊이 충돌을 방지한다.
+			Matrix4 adModel = glm::translate(
+				Matrix4{ 1.0f }, (from + to) * 0.5f + inward * 0.12f);
+			adModel = glm::rotate(
+				adModel, glm::atan(-direction.z, direction.x), up);
+			// 광고 이미지의 가로:세로 3:1 비율을 유지한다.
+			adModel = glm::scale(
+				adModel, Vector3{ length, length / 3.0f, 1.0f }); // 광고 패널의 크기를 펜스 세그먼트의 길이에 맞추고, 높이는 가로:세로 3:1 비율을 유지하도록 설정
+
+			shader.setMat4("default", "model", adModel); // 광고 패널의 모델 행렬을 셰이더에 전달
+			shader.setVec3("default", "color", Vector3{ 1.0f, 1.0f, 1.0f }); // 광고 패널의 색상을 흰색으로 설정하여 텍스처가 원래 색상으로 보이도록 한다.
+			shader.setBool("default", "useTexture", true); // 텍스처 사용을 활성화하여 광고 패널에 텍스처를 적용한다.
+			MeshManager::getInstance().drawMesh("fence_ad_panel"); // 광고 패널 메쉬를 그린다.
+			shader.setBool("default", "useTexture", false); // 텍스처 사용을 해제하여 다른 객체에 영향을 주지 않도록 한다.
+		}
+		shader.setVec3("default", "color", Vector3{ 0.05f, 0.25f, 0.15f }); // 펜스 색상으로 복구
 	}
 
 	// 뒤에서 그리는 베이스와 선의 색상 복구
