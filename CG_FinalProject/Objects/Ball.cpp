@@ -8,12 +8,12 @@
 #include "Scenes/Scene_Start.h"
 #include "Managers/SceneManager.h"
 
-Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
+Ball::Ball(float _speed, Vector3 _destination, Vector3 _midPos, PITCH_TYPE _pitchType)
 	: speed(_speed)
 	, destination(_destination)
 	, pitchType(_pitchType)
 {
-	startPos = Vector3(-0.3f, 1.7f, MOUND_Z);
+	startPos = Vector3(0.0f, 1.7f, MOUND_Z);
 
 	setPos(startPos);
 	setScale(Vector3{ 0.0365f, 0.0365f, 0.0365f });
@@ -23,9 +23,10 @@ Ball::Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType)
 	case PITCH_TYPE::STRAIGHT:
 		break;
 	case PITCH_TYPE::CURVE:
-		// 커브볼 - n% 지점을 2번째 컨트롤 포인트로 설정
-		midControlPoint = (startPos + destination) * 0.3f;
-		midControlPoint.y = startPos.y;
+		midControlPoint = (_midPos - ((1.0f - 0.5f) * (1.0f - 0.5f) * startPos
+			+ 0.5f * 0.5f * destination)) / (2.0f * 0.5f * (1.0f - 0.5f));
+		midControlPoint.z = MOUND_Z * 0.5f;
+
 		break;
 	}
 

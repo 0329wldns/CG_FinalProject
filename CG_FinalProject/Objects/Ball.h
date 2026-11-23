@@ -16,7 +16,7 @@ enum class PITCH_TYPE
 class Ball : public Object
 {
 public:
-	Ball(float _speed, Vector3 _destination, PITCH_TYPE _pitchType);
+	Ball(float _speed, Vector3 _destination, Vector3 _midPos, PITCH_TYPE _pitchType);
 	Ball(float _speed, Vector3 _destination);
 	~Ball();
 

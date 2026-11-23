@@ -15,9 +15,13 @@ Pitcher::Pitcher()
 void Pitcher::update()
 {
 	static PITCH_TYPE pitchType{ PITCH_TYPE::STRAIGHT };
+	static Vector3 destination{ 0.0f, 0.0f, 0.0f };
+	static Vector3 midPos{ 0.0f, 0.0f, 0.0f };
 
 	Scene_Start* curScene{ static_cast<Scene_Start*>(SceneManager::getInstance().getCurScene()) };
 	KeyManager& keyManager{ KeyManager::getInstance() };
+
+	Vector3 worldMousePos{ curScene->getWorldMousePos() };
 
 	// 던질 구종 고르기
 	if (keyManager.getKeyState(KEY::NUM1) == KEY_STATE::TAP)
@@ -35,13 +39,20 @@ void Pitcher::update()
 		MousePointer* mousePointer = new MousePointer(mousePos);
 		createUI(mousePointer, UI_GROUP::MOUSE_POINTER);
 
-		Vector3 worldMousePos{ curScene->getWorldMousePos() };
+		destination = worldMousePos ;
+	}
+	if (keyManager.getKeyState(KEY::MOUSE_L) == KEY_STATE::HOLD)
+	{
+		
+	}
+	if (keyManager.getKeyState(KEY::MOUSE_L) == KEY_STATE::AWAY)
+	{
+		midPos = worldMousePos;
 
-		Vector3 destination{ worldMousePos };
-		Ball* ball = new Ball(140.0f, destination, pitchType);
+		Ball* ball = new Ball(140.0f, STRIKE_ZONE::CENTER, midPos, pitchType);
 		createObject(ball, OBJECT_GROUP::BALL);
 
-		cout << worldMousePos.x << ", " << worldMousePos.y << ", " << worldMousePos.z << endl;
+		cout << midPos.x << ", " << midPos.y << ", " << midPos.z << endl;
 	}
 }
 

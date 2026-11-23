@@ -90,7 +90,7 @@ Vector3 Scene_Start::getWorldMousePos() const
 	Vector3 worldSpaceMouseDir{ invViewMatrix * Vector4(cameraSpaceMouseDir, 0.0f) };
 
 	Vector3 cameraPos{ camera->getPos() };
-	Vector3 worldSpaceMousePos{ cameraPos + worldSpaceMouseDir * (-cameraPos.z / worldSpaceMouseDir.z) };
+	Vector3 worldSpaceMousePos{ cameraPos + worldSpaceMouseDir * ((-9.22f - cameraPos.z) / worldSpaceMouseDir.z) };
 	return worldSpaceMousePos;
 }
 
