@@ -24,6 +24,8 @@ public:
 	void setAtImediate(Vector3 _at) { at = _at; oldAt = _at; t = 0.0f; }
 
 	float getFovy() const { return fovy; }
+
+	bool getIsOrthographic() const { return isOrthographic; }
 	Matrix4 getViewMatrix() const { return viewMatrix; }
 	static Camera* getCurCamera() { return curCamera; }
 

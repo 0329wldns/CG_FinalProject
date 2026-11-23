@@ -168,6 +168,7 @@
     <ClCompile Include="Managers\TimeManager.cpp" />
     <ClCompile Include="UI\MousePointer.cpp" />
     <ClCompile Include="UI\Park.cpp" />
+    <ClCompile Include="UI\Sky.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Componants\Collider.h" />
@@ -194,10 +195,13 @@
     <ClInclude Include="Managers\TimeManager.h" />
     <ClInclude Include="UI\MousePointer.h" />
     <ClInclude Include="UI\Park.h" />
+    <ClInclude Include="UI\Sky.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\default.frag" />
     <None Include="Shader\default.vert" />
+    <None Include="Shader\sky.vert" />
+    <None Include="Shader\sky.frag" />
     <None Include="Shader\UI.frag" />
     <None Include="Shader\UI.vert" />
   </ItemGroup>

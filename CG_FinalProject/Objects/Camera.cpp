@@ -73,7 +73,7 @@ void Camera::update()
 	{
 		if (isOrthographic)
 		{
-			const float halfHeight = 80.0f;
+			const float halfHeight = 120.0f;
 			const float halfWidth = halfHeight * aspect;
 
 			const Matrix4 projection = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, 0.1f, VISIBLE_RANGE);

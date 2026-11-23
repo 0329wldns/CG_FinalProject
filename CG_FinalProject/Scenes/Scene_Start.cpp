@@ -102,6 +102,8 @@ void Scene_Start::update()
 
 void Scene_Start::drawBG() const
 {
+	sky.render();
+
 	if (showAxis)
 	{
 		Scene::drawAxis();

@@ -4,6 +4,7 @@
 #include "Objects/Camera.h"
 #include "Objects/Ball.h"
 #include "UI/Park.h"
+#include "UI/Sky.h"
 #include "UI/MousePointer.h"
 
 // 시작 씬 (타이틀 화면 / 모드 및 난이도 선택), *(현재는 인게임 테스트 용)*
@@ -38,6 +39,7 @@ public:
 	void setCamera(const string& name);
 
 private:
+	Sky sky;
 	map<string, Camera*> cameras;	// 카메라를 이름, Camera 포인터로 매핑
 	Ball* ball;
 

@@ -16,7 +16,11 @@ bool TextureManager::init() // 텍스처를 초기화하고 로드한다. init()
 			return false;
 	}
 
-	return loadTexture("fence_ad", "res/fence_ad_diamond.png");// 기본 텍스처를 로드한다.
+	return loadTexture("fence_ad", "res/fence_ad_diamond.png")
+		&& loadTexture("power", "res/fence_ad_power_drive.png")
+		&& loadTexture("burger", "res/fence_ad_home_run_burger.png")
+		&& loadTexture("ace", "res/fence_ad_ace_athletics.png")
+		&& loadTexture("coffee", "res/fence_ad_grand_slam_coffee.png");
 }
 
 bool TextureManager::loadTexture(const string& name, const string& path)
