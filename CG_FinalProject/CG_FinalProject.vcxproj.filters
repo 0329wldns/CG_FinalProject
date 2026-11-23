@@ -108,6 +108,9 @@
     <ClCompile Include="UI\Park.cpp">
       <Filter>소스 파일\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UI\Sky.cpp">
+      <Filter>소스 파일\UI</Filter>
+    </ClCompile>
     <ClCompile Include="UI\MousePointer.cpp">
       <Filter>소스 파일\UI</Filter>
     </ClCompile>
@@ -179,6 +182,9 @@
     <ClInclude Include="UI\Park.h">
       <Filter>헤더 파일\UI</Filter>
     </ClInclude>
+    <ClInclude Include="UI\Sky.h">
+      <Filter>헤더 파일\UI</Filter>
+    </ClInclude>
     <ClInclude Include="UI\MousePointer.h">
       <Filter>헤더 파일\UI</Filter>
     </ClInclude>
@@ -194,6 +200,12 @@
       <Filter>헤더 파일\Shader</Filter>
     </None>
     <None Include="Shader\default.vert">
+      <Filter>헤더 파일\Shader</Filter>
+    </None>
+    <None Include="Shader\sky.vert">
+      <Filter>헤더 파일\Shader</Filter>
+    </None>
+    <None Include="Shader\sky.frag">
       <Filter>헤더 파일\Shader</Filter>
     </None>
     <None Include="Shader\UI.vert">
