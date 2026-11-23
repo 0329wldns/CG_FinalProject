@@ -15,7 +15,7 @@ void Park::render() const
 	//잔디 평면 추가 
 	Matrix4 model{ 1.0f };
 	model = glm::translate(model, Vector3{ 0.0f, 0.0f, 0.0f });
-	model = glm::scale(model, Vector3{ 160.0f, 0.01f, 150.0f });
+	model = glm::scale(model, Vector3{ 400.0f, 0.01f, 240.0f });
 
 	auto& shader = ShaderManager::getInstance();
 	shader.setMat4("default", "model", model);
@@ -117,7 +117,7 @@ void Park::render() const
 
 	// 외야 펜스
 	const int fenceSegments = 32;
-	const float centerFieldZ = -50.0f;// 외야 펜스의 중앙 Z 좌표, 펜스는 중앙에서 양쪽으로 곡선 형태로 그려짐
+	const float centerFieldZ = -110.0f;// 외야 펜스의 중앙 Z 좌표, 펜스는 중앙에서 양쪽으로 곡선 형태로 그려짐
 
 	// t가 -1이면 왼쪽 폴, 0이면 중앙 펜스, +1이면 오른쪽 폴
 	auto fencePoint = [&](float t)
