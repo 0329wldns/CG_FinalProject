@@ -39,7 +39,6 @@ public:
 
 private:
 	map<string, Camera*> cameras;	// 카메라를 이름, Camera 포인터로 매핑
-	Camera* camera;
 	Ball* ball;
 
 	// 디버그용 플래그들

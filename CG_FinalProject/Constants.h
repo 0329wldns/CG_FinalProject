@@ -14,6 +14,7 @@ static uniform_real_distribution<float> realDist(0.0f, 1.0f);
 static const int SCREEN_WIDTH = 1920;
 static const int SCREEN_HEIGHT = 1080;
 static const float VISIBLE_RANGE = 300.0f;
+static const float FOVY = 60.0f;
 
 // 자주 사용하는 기본 색상 벡터 정의 (RGB 0.0f ~ 1.0f)
 static const Color COLOR_RED{ 1.0f, 0.0f, 0.0f };

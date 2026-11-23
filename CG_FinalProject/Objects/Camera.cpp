@@ -19,6 +19,14 @@ Camera::Camera(Vector3 _pos, Vector3 _at)
 	setPos(_pos);
 }
 
+Camera::Camera(Vector3 _pos, Vector3 _at, float _fovy)
+	: at(_at)
+	, oldAt(_at)
+	, fovy(_fovy)
+{
+	setPos(_pos);
+}
+
 Camera::Camera(Vector3 _pos, Vector3 _at, Vector3 _up)
 	: at(_at)
 	, oldAt(_at)
@@ -75,7 +83,7 @@ void Camera::update()
 		}
 		else
 		{
-			shader.setMat4("default", "projection", glm::perspective(glm::radians(60.0f), aspect, 0.1f, VISIBLE_RANGE));
+			shader.setMat4("default", "projection", glm::perspective(glm::radians(fovy), aspect, 0.1f, VISIBLE_RANGE));
 			shader.setMat4("default", "view", viewMatrix);
 		}
 	}

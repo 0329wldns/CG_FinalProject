@@ -10,6 +10,12 @@ StrikeZone::StrikeZone()
 	setScale(Vector3(STRIKE_ZONE::WIDTH, STRIKE_ZONE::HEIGHT, STRIKE_ZONE::DEPTH));
 }
 
+StrikeZone::StrikeZone(Vector3 _pos)
+{
+	setPos(_pos);
+	setScale(Vector3(STRIKE_ZONE::WIDTH, STRIKE_ZONE::HEIGHT, STRIKE_ZONE::DEPTH));
+}
+
 void StrikeZone::update()
 {
 }

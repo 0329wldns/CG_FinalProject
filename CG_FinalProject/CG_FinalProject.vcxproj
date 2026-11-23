@@ -159,6 +159,7 @@
     <ClCompile Include="Objects\Ball.cpp" />
     <ClCompile Include="Objects\Camera.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
+    <ClCompile Include="Objects\Pitcher.cpp" />
     <ClCompile Include="Objects\StrikeZone.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Managers\SceneManager.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Objects\Ball.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Objects\Object.h" />
+    <ClInclude Include="Objects\Pitcher.h" />
     <ClInclude Include="Objects\StrikeZone.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scenes\Scene.h" />
