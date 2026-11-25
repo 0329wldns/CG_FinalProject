@@ -6,6 +6,7 @@
 #include "Scenes/Scene_Start.h"
 #include "UI/MousePointer.h"
 #include "Eventfunc.h"
+#include "Managers/ShaderManager.h"
 
 Pitcher::Pitcher()
 {
@@ -15,6 +16,7 @@ Pitcher::Pitcher()
 void Pitcher::update()
 {
 	static PITCH_TYPE pitchType{ PITCH_TYPE::STRAIGHT };
+	static const Vector3 startPos = Vector3(0.0f, 1.7f, MOUND_Z);
 	static Vector3 destination{ 0.0f, 0.0f, 0.0f };
 	static Vector3 midPos{ 0.0f, 0.0f, 0.0f };
 
@@ -43,20 +45,58 @@ void Pitcher::update()
 	}
 	if (keyManager.getKeyState(KEY::MOUSE_L) == KEY_STATE::HOLD)
 	{
-		
+		midPos = worldMousePos;
+		midPos.z = MOUND_Z * 0.5f;
+
+		Vector3 midControlPoint = (midPos - ((1.0f - 0.5f) * (1.0f - 0.5f) * startPos
+			+ 0.5f * 0.5f * destination)) / (2.0f * 0.5f * (1.0f - 0.5f));
+
+		std::vector<std::array<float, 3>> trajectoryVertices;
+		trajectoryVertices.reserve(50);
+
+		for (float t = 0.0f; t <= 1.0f; t += 0.02f)
+		{
+			Vector3 pos{ (1.0f - t) * (1.0f - t) * startPos
+				+ 2.0f * (1.0f - t) * t * midControlPoint
+				+ t * t * destination };
+
+			trajectoryVertices.push_back({ pos.x, pos.y, pos.z });
+		}
+
+		glGenVertexArrays(1, &trajectoryVAO);
+		glGenBuffers(1, &trajectoryVBO);
+
+		glBindVertexArray(trajectoryVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, trajectoryVBO);
+		glBufferData(GL_ARRAY_BUFFER, trajectoryVertices.size() * sizeof(std::array<float, 3>), trajectoryVertices.data(), GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
 	}
 	if (keyManager.getKeyState(KEY::MOUSE_L) == KEY_STATE::AWAY)
 	{
-		midPos = worldMousePos;
+		glDeleteVertexArrays(1, &trajectoryVAO);
+		glDeleteBuffers(1, &trajectoryVBO);
 
-		Ball* ball = new Ball(140.0f, STRIKE_ZONE::CENTER, midPos, pitchType);
+		Ball* ball = new Ball(140.0f, destination, midPos, pitchType);
 		createObject(ball, OBJECT_GROUP::BALL);
-
-		cout << midPos.x << ", " << midPos.y << ", " << midPos.z << endl;
 	}
 }
 
 void Pitcher::render() const
 {
-
+	if (KeyManager::getInstance().getKeyState(KEY::MOUSE_L) == KEY_STATE::HOLD)
+	{
+		glDisable(GL_DEPTH_TEST);
+		ShaderManager::getInstance().setMat4("default", "model", Matrix4{ 1.0f });
+		ShaderManager::getInstance().setFloat("default", "transparency", 0.5f);
+		glPointSize(3.0f);
+		glBindVertexArray(trajectoryVAO);
+		glDrawArrays(GL_POINTS, 0, 100);
+		glBindVertexArray(0);
+		glEnable(GL_DEPTH_TEST);
+	}
 }
