@@ -153,7 +153,7 @@ void Ball::render() const
 		ShaderManager::getInstance().setFloat("default", "transparency", 0.5f);
 		glPointSize(3.0f);
 		glBindVertexArray(trajectoryVAO);
-		glDrawArrays(GL_POINTS, 0, 100);
+		glDrawArrays(GL_POINTS, 0, 50);
 		glBindVertexArray(0);
 		glEnable(GL_DEPTH_TEST);
 	}
