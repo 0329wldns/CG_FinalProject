@@ -126,6 +126,12 @@ void Ball::update()
 		myPos = (1.0f - t) * (1.0f - t) * startPos
 			+ 2.0f * (1.0f - t) * t * midControlPoint
 			+ t * t * destination;
+
+		direction = 2.0f * (1.0f - t) * (midControlPoint - startPos)
+			+ 2.0f * t * (destination - midControlPoint);
+		direction = glm::normalize(direction);
+
+		cout << "direction: " << direction.x << ", " << direction.y << ", " << direction.z << endl;
 	}
 
 	t += dt * speed / 66.384f;
@@ -179,4 +185,26 @@ void Ball::render() const
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_BLACK);
 
 	MeshManager::getInstance().drawCircle();
+
+	// 공 방향벡터 렌더링
+	Matrix4 directionModel{ 1.0f };
+
+	glm::vec3 fromDir{ 1.0f, 0.0f, 0.0f };
+
+	float cosTheta{ glm::clamp(glm::dot(fromDir, direction), -1.0f, 1.0f) };
+	float angleRad{ std::acos(cosTheta) };
+	glm::vec3 axis{ glm::cross(fromDir, direction) };
+
+	directionModel = glm::translate(directionModel, getPos());
+	if (glm::length(axis) > 1e-6f)
+	{
+		directionModel = glm::rotate(directionModel, angleRad, glm::normalize(axis));
+	}
+	directionModel = glm::scale(directionModel, Vector3{ 1.0f, 1.0f, 1.0f });
+
+	ShaderManager::getInstance().setMat4("default", "model", directionModel);
+	ShaderManager::getInstance().setFloat("default", "transparency", 1.0f);
+	ShaderManager::getInstance().setVec3("default", "color", COLOR_BLUE);
+
+	MeshManager::getInstance().drawLine();
 }

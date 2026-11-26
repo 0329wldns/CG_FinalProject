@@ -81,7 +81,7 @@ void Pitcher::update()
 		glDeleteVertexArrays(1, &trajectoryVAO);
 		glDeleteBuffers(1, &trajectoryVBO);
 
-		Ball* ball = new Ball(140.0f, destination, midPos, pitchType);
+		Ball* ball = new Ball(10.0f, destination, midPos, pitchType);
 		createObject(ball, OBJECT_GROUP::BALL);
 	}
 }
