@@ -130,7 +130,7 @@ void Scene_Start::enter()
 	Camera* topViewCamera = new Camera(Vector3(0.0f, 50.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), true);
 	Camera* sideViewCamera = new Camera(Vector3(5.0f, 1.5f, 1.5f), Vector3(0.0f, 1.0f, -3.0f));
 	Camera* batterViewCamera = new Camera(Vector3(0.0f, 1.0f, 3.0f), Vector3(0.0f, 1.0f, 0.0f));
-	Camera* pitcherViewCamera = new Camera(Vector3(0.0f, 1.7f, -19.0f), Vector3(0.0f, STRIKE_ZONE::CENTER.y, 0.0f), 12.0f);
+	Camera* pitcherViewCamera = new Camera(Vector3(0.0f, 1.7f, -20.0f), Vector3(0.0f, STRIKE_ZONE::CENTER.y, 0.0f), 12.0f);
 
 	addCamera("top", topViewCamera);
 	addCamera("side", sideViewCamera);

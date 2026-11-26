@@ -18,18 +18,6 @@ Ball::Ball(float _speed, Vector3 _destination, Vector3 _midPos, PITCH_TYPE _pitc
 	setPos(startPos);
 	setScale(Vector3{ 0.0365f, 0.0365f, 0.0365f });
 
-	switch (pitchType)
-	{
-	case PITCH_TYPE::STRAIGHT:
-		break;
-	case PITCH_TYPE::CURVE:
-		midControlPoint = (_midPos - ((1.0f - 0.5f) * (1.0f - 0.5f) * startPos
-			+ 0.5f * 0.5f * destination)) / (2.0f * 0.5f * (1.0f - 0.5f));
-		midControlPoint.z = MOUND_Z * 0.5f;
-
-		break;
-	}
-
 	std::vector<std::array<float, 3>> trajectoryVertices;
 	trajectoryVertices.reserve(50);
 	if (pitchType == PITCH_TYPE::STRAIGHT)
@@ -43,6 +31,10 @@ Ball::Ball(float _speed, Vector3 _destination, Vector3 _midPos, PITCH_TYPE _pitc
 	}
 	else
 	{
+		midControlPoint = (_midPos - ((1.0f - 0.5f) * (1.0f - 0.5f) * startPos
+			+ 0.5f * 0.5f * destination)) / (2.0f * 0.5f * (1.0f - 0.5f));
+		midControlPoint.z = MOUND_Z * 0.5f;
+
 		for (float t = 0.0f; t <= 1.0f; t += 0.02f)
 		{
 			Vector3 pos{ (1.0f - t) * (1.0f - t) * startPos
@@ -67,19 +59,22 @@ Ball::Ball(float _speed, Vector3 _destination, Vector3 _midPos, PITCH_TYPE _pitc
 	glBindVertexArray(0);
 }
 
-Ball::Ball(float _speed, Vector3 _destination)
+Ball::Ball(float _speed, Vector3 hitPos, Vector3 _direction)
 	: speed( _speed )
-	, destination( _destination )
-	, startPos( Vector3{ 0.0f, 0.0f, 0.0f } )
+	, direction( _direction )
+	, startPos( hitPos )
 {
 	setPos(startPos);
-	setScale(Vector3{ 0.07f, 0.07f, 0.07f });
+	setScale(Vector3{ 0.0365f, 0.0365f, 0.0365f });
+
+	destination = startPos + direction * 10.0f; // 임시로 10m 날아가도록 설정
+	midControlPoint = (startPos + destination) * 0.5f;
 
 	// 공 궤적 정점 버퍼 세팅
 	std::vector<std::array<float, 3>> trajectoryVertices;
-	trajectoryVertices.reserve(100);
+	trajectoryVertices.reserve(50);
 
-	for (float t = 0.0f; t <= 1.0f; t += 0.01f)
+	for (float t = 0.0f; t <= 1.0f; t += 0.02f)
 	{
 		Vector3 pos{ (1.0f - t) * (1.0f - t) * startPos
 			+ 2.0f * (1.0f - t) * t * midControlPoint
@@ -120,6 +115,8 @@ void Ball::update()
 	if (pitchType == PITCH_TYPE::STRAIGHT)
 	{
 		myPos = (1.0f - t) * startPos + t * destination;
+
+		direction = glm::normalize(destination - startPos);
 	}
 	else
 	{
@@ -130,8 +127,6 @@ void Ball::update()
 		direction = 2.0f * (1.0f - t) * (midControlPoint - startPos)
 			+ 2.0f * t * (destination - midControlPoint);
 		direction = glm::normalize(direction);
-
-		cout << "direction: " << direction.x << ", " << direction.y << ", " << direction.z << endl;
 	}
 
 	t += dt * speed / 66.384f;
@@ -139,6 +134,8 @@ void Ball::update()
 	if (t > 1.0f)
 	{
 		deleteObject(this);
+		Vector3 hitPos{ getPos() };
+		Vector3 hitDirection{ glm::normalize(-direction + glm::normalize(Vector3{ 0.0f, 1.0f, -1.0f })) };
 	}
 
 	setPos( myPos );

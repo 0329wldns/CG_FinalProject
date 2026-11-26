@@ -34,6 +34,10 @@ void Pitcher::update()
 	{
 		pitchType = PITCH_TYPE::CURVE;
 	}
+	if (keyManager.getKeyState(KEY::NUM3) == KEY_STATE::TAP)
+	{
+		pitchType = PITCH_TYPE::SLIDER;
+	}
 
 	if (keyManager.getKeyState(KEY::MOUSE_L) == KEY_STATE::TAP)
 	{
@@ -47,6 +51,19 @@ void Pitcher::update()
 	{
 		midPos = worldMousePos;
 		midPos.z = MOUND_Z * 0.5f;
+
+		if (pitchType == PITCH_TYPE::CURVE)
+		{
+			midPos.y = clamp(midPos.y, startPos.y + (destination.y - startPos.y) * 0.5f, 1.5f);
+			
+			midPos.x = (destination.x - startPos.x) * 0.5f;
+		}
+		else if (pitchType == PITCH_TYPE::SLIDER)
+		{
+			midPos.x = clamp(midPos.x, -0.5f, 0.5f);
+
+			midPos.y = startPos.y + (destination.y - startPos.y) * 0.5f;
+		}
 
 		Vector3 midControlPoint = (midPos - ((1.0f - 0.5f) * (1.0f - 0.5f) * startPos
 			+ 0.5f * 0.5f * destination)) / (2.0f * 0.5f * (1.0f - 0.5f));
@@ -81,7 +98,7 @@ void Pitcher::update()
 		glDeleteVertexArrays(1, &trajectoryVAO);
 		glDeleteBuffers(1, &trajectoryVBO);
 
-		Ball* ball = new Ball(10.0f, destination, midPos, pitchType);
+		Ball* ball = new Ball(140.0f, destination, midPos, pitchType);
 		createObject(ball, OBJECT_GROUP::BALL);
 	}
 }

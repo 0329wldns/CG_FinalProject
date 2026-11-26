@@ -16,8 +16,11 @@ enum class PITCH_TYPE
 class Ball : public Object
 {
 public:
+	// 던져진 공 생성자
 	Ball(float _speed, Vector3 _destination, Vector3 _midPos, PITCH_TYPE _pitchType);
-	Ball(float _speed, Vector3 _destination);
+
+	// 배트에 맞은 공 생성자
+	Ball(float _speed, Vector3 hitPos, Vector3 _direction);
 	~Ball();
 
 	// 매 프레임 공의 이동 및 물리/궤적 연산 처리
