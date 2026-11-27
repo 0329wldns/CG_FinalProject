@@ -157,6 +157,7 @@
     <ClCompile Include="Managers\MeshManager.cpp" />
     <ClCompile Include="Managers\TextureManager.cpp" />
     <ClCompile Include="Objects\Ball.cpp" />
+    <ClCompile Include="Objects\Batter.cpp" />
     <ClCompile Include="Objects\Camera.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
     <ClCompile Include="Objects\Pitcher.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Managers\MeshManager.h" />
     <ClInclude Include="Managers\TextureManager.h" />
     <ClInclude Include="Objects\Ball.h" />
+    <ClInclude Include="Objects\Batter.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Objects\Object.h" />
     <ClInclude Include="Objects\Pitcher.h" />

@@ -8,6 +8,7 @@
 #include "Managers/ShaderManager.h"
 #include "UI/MousePointer.h"
 #include "Objects/Pitcher.h"
+#include "Objects/Batter.h"
 
 void Scene_Start::processKeyInput()
 {
@@ -125,6 +126,11 @@ void Scene_Start::enter()
 	// 투수
 	Pitcher* pitcher = new Pitcher();
 	createObject(pitcher, OBJECT_GROUP::DEFAULT);
+
+	// 타자
+	Batter* batter = new Batter();
+	batter->setPos(Vector3{ 0.8f,0.0f,-0.4f });
+	createObject(batter, OBJECT_GROUP::DEFAULT);
 
 	// 카메라 초기화
 	Camera* topViewCamera = new Camera(Vector3(0.0f, 50.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), true);
