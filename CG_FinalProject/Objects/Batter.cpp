@@ -9,22 +9,69 @@ void Batter::update()
 	// 예: 위치, 속도, 애니메이션 상태 등을 업데이트할 수 있습니다.
 }
 
-void Batter::render() const // 오브젝트를 화면에 렌더링하는 함수
+void Batter::render() const
 {
-	// getPos()는 타자의 발 밑 기준점
-	const Matrix4 root = glm::translate(Matrix4(1.0f), getPos()); // 오브젝트의 위치를 기준으로 변환 행렬을 생성합니다.
-	
-	// 발밑에서 몸통 중심까지 올린다.
-	const Matrix4 torso = glm::translate(root, Vector3(0.0f, 1.25f, 0.0f)); // 발밑에서 몸통 중심까지 올리는 변환 행렬을 생성합니다.
+    auto& shader = ShaderManager::getInstance();
+    auto& meshes = MeshManager::getInstance();
 
-	// 큐브를 몸통의 너비, 높이, 두께에 맞춘다.
-	const Matrix4 torsoModel = glm::scale(torso, Vector3(0.42f, 0.55f, 0.24)); // 몸통의 크기에 맞춘 스케일 변환 행렬을 생성합니다.)
+    shader.setFloat("default", "transparency", 1.0f);
+    shader.setBool("default", "useTexture", false);
 
-	auto& shader = ShaderManager::getInstance(); // ShaderManager의 인스턴스를 가져옵니다.
-	shader.setMat4("default", "model", torsoModel); // 셰이더에 모델 변환 행렬을 설정합니다.
-	shader.setVec3("default", "color", Vector3(0.08f, 0.15f, 0.35f)); // 셰이더에 색상을 설정합니다.
-	shader.setFloat("default", "transparency", 1.0f); // 셰이더에 투명도를 설정합니다.
-	shader.setBool("default", "useTexture", false); // 셰이더에 텍스처 사용 여부를 설정합니다.
+    const Vector3 jersey{ 0.08f, 0.15f, 0.35f };
+    const Vector3 pants{ 0.88f, 0.88f, 0.84f };
+    const Vector3 skin{ 0.84f, 0.62f, 0.43f };
 
-	MeshManager::getInstance().drawMesh("cube"); // MeshManager를 사용하여 큐브 메쉬를 렌더링합니다.
+    // 관절 기준에서 큐브 중심을 옮기고, 해당 부위 크기로 그린다.
+    auto drawPart = [&](const Matrix4& joint, const Vector3& offset,
+        const Vector3& size, const Vector3& color)
+        {
+            const Matrix4 model = glm::scale(glm::translate(joint, offset), size);
+            shader.setMat4("default", "model", model);
+            shader.setVec3("default", "color", color);
+            meshes.drawMesh("cube");
+        };
+
+    // root는 발밑, pelvis는 골반 중심, torso는 몸통 중심이다.
+    const Matrix4 root = glm::translate(Matrix4{ 1.0f }, getPos());
+    const Matrix4 pelvis = glm::translate(root, Vector3{ 0.0f, 0.91f, 0.0f });
+    const Matrix4 torso = glm::translate(pelvis, Vector3{ 0.0f, 0.34f, 0.0f });
+
+    drawPart(pelvis, Vector3{ 0.0f }, Vector3{ 0.34f, 0.16f, 0.23f }, pants);
+    drawPart(torso, Vector3{ 0.0f }, Vector3{ 0.42f, 0.55f, 0.24f }, jersey);
+    drawPart(torso, Vector3{ 0.0f, 0.30f, 0.0f },
+        Vector3{ 0.11f, 0.08f, 0.11f }, skin); // 목
+    drawPart(torso, Vector3{ 0.0f, 0.44f, 0.0f },
+        Vector3{ 0.20f, 0.22f, 0.20f }, skin); // 머리
+
+    // X 좌표 부호를 바꿔 양쪽 팔과 다리를 같은 방식으로 만든다.
+    for (float side : { -1.0f, 1.0f })
+    {
+        const Matrix4 shoulder = glm::translate(
+            torso, Vector3{ side * 0.265f, 0.22f, 0.0f });
+        const Matrix4 elbow = glm::translate(
+            shoulder, Vector3{ 0.0f, -0.27f, 0.0f });
+        const Matrix4 wrist = glm::translate(
+            elbow, Vector3{ 0.0f, -0.24f, 0.0f });
+
+        drawPart(shoulder, Vector3{ 0.0f, -0.135f, 0.0f },
+            Vector3{ 0.12f, 0.27f, 0.13f }, jersey);
+        drawPart(elbow, Vector3{ 0.0f, -0.12f, 0.0f },
+            Vector3{ 0.10f, 0.24f, 0.10f }, skin);
+        drawPart(wrist, Vector3{ 0.0f, -0.05f, 0.0f },
+            Vector3{ 0.10f, 0.10f, 0.09f }, skin);
+
+        const Matrix4 hip = glm::translate(
+            pelvis, Vector3{ side * 0.095f, -0.04f, 0.0f });
+        const Matrix4 knee = glm::translate(
+            hip, Vector3{ 0.0f, -0.40f, 0.0f });
+        const Matrix4 ankle = glm::translate(
+            knee, Vector3{ 0.0f, -0.37f, 0.0f });
+
+        drawPart(hip, Vector3{ 0.0f, -0.20f, 0.0f },
+            Vector3{ 0.16f, 0.40f, 0.17f }, pants);
+        drawPart(knee, Vector3{ 0.0f, -0.185f, 0.0f },
+            Vector3{ 0.13f, 0.37f, 0.14f }, pants);
+        drawPart(ankle, Vector3{ 0.0f, -0.05f, 0.045f },
+            Vector3{ 0.14f, 0.10f, 0.23f }, jersey);
+    }
 }
