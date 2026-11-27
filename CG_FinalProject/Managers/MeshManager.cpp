@@ -118,6 +118,7 @@ void MeshManager::init()
 	glBindVertexArray(0);
 	
 	loadOBJ("cube", "res/cube.obj", glm::vec3(1.0f, 1.0f, 1.0f));
+	loadOBJ("baseball_bat", "res/baseball_bat.obj", glm::vec3(1.0f));
 	loadOBJ("pyramid", "res/pyramid.obj", glm::vec3(1.0f, 1.0f, 1.0f));
 	loadOBJ("sphere", "res/sphere_16x16.obj", glm::vec3(1.0f, 1.0f, 1.0f));
 	loadOBJ("home_plate", "res/home_plate.obj", glm::vec3(1.0f, 1.0f, 1.0f));

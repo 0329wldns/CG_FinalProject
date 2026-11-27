@@ -9,6 +9,7 @@
 #include "UI/MousePointer.h"
 #include "Objects/Pitcher.h"
 #include "Objects/Batter.h"
+#include "Objects/Bat.h"
 
 void Scene_Start::processKeyInput()
 {
@@ -128,9 +129,11 @@ void Scene_Start::enter()
 	createObject(pitcher, OBJECT_GROUP::DEFAULT);
 
 	// 타자
-	Batter* batter = new Batter();
+	Bat* bat = new Bat();
+	Batter* batter = new Batter(*bat);
 	batter->setPos(Vector3{ 0.8f,0.0f,-0.4f });
 	createObject(batter, OBJECT_GROUP::DEFAULT);
+	createObject(bat, OBJECT_GROUP::BAT);
 
 	// 카메라 초기화
 	Camera* topViewCamera = new Camera(Vector3(0.0f, 50.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), true);
