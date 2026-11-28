@@ -57,6 +57,9 @@ Ball::Ball(float _speed, Vector3 _destination, Vector3 _midPos, PITCH_TYPE _pitc
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	createCollider();
+	getCollider()->setScale(getScale() * 2.0f);
 }
 
 Ball::Ball(float _speed, Vector3 hitPos, Vector3 _direction)
@@ -204,4 +207,6 @@ void Ball::render() const
 	ShaderManager::getInstance().setVec3("default", "color", COLOR_BLUE);
 
 	MeshManager::getInstance().drawLine();
+
+	componantRender();
 }
