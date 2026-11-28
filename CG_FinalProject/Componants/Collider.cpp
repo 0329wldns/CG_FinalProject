@@ -19,30 +19,32 @@ Collider::Collider()
 
 void Collider::finalUpdate()
 {
-	pos.x = owner->getPos().x + offset.x;
-	pos.y = owner->getPos().y + offset.y;
+	pos = owner->getPos() + offset;
 }
 
 void Collider::render()
 {
-	glm::vec3 color{ 0.0f, 0.0f, 0.0f };
+    glm::vec3 color{ 0.0f, 1.0f, 0.0f }; // 기본 초록색 와이어프레임
+    if (isCol) color = glm::vec3{ 1.0f, 0.0f, 0.0f };
 
-	if (isCol) color[0] = 1.0f; // 충돌 중이면 빨간색
+    ShaderManager::getInstance().useProgram("default");
 
-	ShaderManager::getInstance().useProgram("default");
+    glm::mat4 model{ 1.0f };
+    if (useModelMatrix)
+    {
+        model = modelMatrix;
+    }
+    else
+    {
+        model = glm::translate(model, getPos());
+        model = glm::scale(model, getScale());
+    }
 
-	Vector2 myPos{ getPos() };
-	Vector2 myScale{ getScale() };
+    ShaderManager::getInstance().setMat4("default", "model", model);
+    ShaderManager::getInstance().setVec3("default", "color", color);
+    ShaderManager::getInstance().setFloat("default", "transparency", 1.0f);
 
-	glm::mat4 model{ 1.0f };
-	model = glm::translate(model, glm::vec3(myPos.x, myPos.y, 0.0f));
-	model = glm::scale(model, glm::vec3(myScale.x * 2, myScale.y * 2, 1.0f));
-
-	ShaderManager::getInstance().setMat4("default", "model", model);
-	ShaderManager::getInstance().setVec3("default", "color", color);
-	ShaderManager::getInstance().setFloat("default", "transparency", 1.0f);
-
-	MeshManager::getInstance().drawQuad(true);
+    MeshManager::getInstance().drawMesh("cube", true);
 }
 
 void Collider::onCollision(Collider* other)

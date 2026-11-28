@@ -28,27 +28,33 @@ public:
 	void onCollisionExit(Collider*);
 
 	// 충돌체 위치 및 크기 설정
-	void setPos(Vector2 _pos) { pos = _pos; }
-	void setPos(float _posX, float _posY) { pos.x = _posX; pos.y = _posY; }
-	void setScale(Vector2 _scale) { scale = _scale; }
-	void setScale(float _scaleX, float _scaleY) { scale.x = _scaleX; scale.y = _scaleY; }
+	void setPos(Vector3 _pos) { pos = _pos; }
+	void setPos(float _posX, float _posY, float _posZ) { pos.x = _posX; pos.y = _posY; pos.z = _posZ; }
+	void setScale(Vector3 _scale) { scale = _scale; }
+	void setScale(float _scaleX, float _scaleY, float _scaleZ) { scale.x = _scaleX; scale.y = _scaleY; scale.z = _scaleZ; }
 
 	// 소유자 오브젝트 중심점으로부터의 상대적 오프셋 설정
-	void setOffset(Vector2 _offset) { offset = _offset; }
-	void setOffset(float _offsetX, float _offsetY) { offset.x = _offsetX; offset.y = _offsetY; }
+	void setOffset(Vector3 _offset) { offset = _offset; }
+	void setOffset(float _offsetX, float _offsetY, float _offsetZ) { offset.x = _offsetX; offset.y = _offsetY; offset.z = _offsetZ; }
+
+	void setModelMatrix(const Matrix4& mat) { modelMatrix = mat; useModelMatrix = true; }
 
 	// 게터 함수들
 	Object* getObj() const { return owner; }
-	Vector2 getPos() const { return pos; }
-	Vector2 getScale() const { return scale; }
-	Vector2 getOffset() const { return offset; }
+	Vector3 getPos() const { return pos; }
+	Vector3 getScale() const { return scale; }
+	Vector3 getOffset() const { return offset; }
 	unsigned int getId() const { return id; }
+	Matrix4 getModelMatrix() const { return modelMatrix; }
 
 private:
 	Object* owner;		// 이 충돌체를 소유한 부모 오브젝트
-	Vector2 pos;		// 실제 월드 좌표 (오브젝트 pos + offset)
-	Vector2 scale;		// 충돌 박스 크기
-	Vector2 offset;		// 부모 오브젝트 기준 상대 위치
+	Vector3 pos;		// 실제 월드 좌표 (오브젝트 pos + offset)
+	Vector3 scale;		// 충돌 박스 크기
+	Vector3 offset;		// 부모 오브젝트 기준 상대 위치
+
+	Matrix4 modelMatrix{ 1.0f };
+	bool useModelMatrix{ false };
 
 	unsigned int id;	// 콜라이더 고유 식별 번호 (충돌 중복 검사 방지용)
 

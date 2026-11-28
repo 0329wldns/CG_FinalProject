@@ -4,6 +4,8 @@
 class Bat : public Object
 {
 public:
+    Bat();
+
     void update() override {}
     void render() const override;
 
